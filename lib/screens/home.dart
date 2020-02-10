@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sakhatyla/screens/random_word.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -15,15 +16,10 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text("Sakha Tyla"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Nothing here',
-            ),
-          ],
-        ),
+      body: Column(
+        children: <Widget>[
+          RandomWord(),
+        ],
       ),
     );
   }
