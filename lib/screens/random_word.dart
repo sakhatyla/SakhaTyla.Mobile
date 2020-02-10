@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sakhatyla/models/article.dart';
+import 'package:sakhatyla/screens/header.dart';
 import 'package:sakhatyla/screens/html_text.dart';
 
 class RandomWord extends StatefulWidget {
@@ -20,34 +21,40 @@ class _RandomWordState extends State<RandomWord> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: FutureBuilder<Article>(
-        future: article,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ListTile(
-                  title: Text(snapshot.data.title),
-                  subtitle: Text('${snapshot.data.fromLanguageName} ⮕ ${snapshot.data.toLanguageName}'),
-                  trailing: IconButton(
-                    icon: Icon(Icons.refresh),
-                    onPressed: _refresh,
-                  )
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: HtmlText(snapshot.data.text),
-                )
-              ],
-            );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          return CircularProgressIndicator();
-        }
-      )
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Header('Random Article'),
+        Card(
+          child: FutureBuilder<Article>(
+            future: article,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ListTile(
+                      title: Text(snapshot.data.title),
+                      subtitle: Text('${snapshot.data.fromLanguageName} ⮕ ${snapshot.data.toLanguageName}'),
+                      trailing: IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: _refresh,
+                      )
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: HtmlText(snapshot.data.text),
+                    )
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return CircularProgressIndicator();
+            }
+          )
+        )
+      ],
     );
   }
 
