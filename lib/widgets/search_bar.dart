@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
+  final String query;
+
+  SearchBar({this.query});
+
   @override
   _SearchBarState createState() => _SearchBarState();
 }
@@ -13,6 +17,7 @@ class _SearchBarState extends State<SearchBar> {
   void initState() {
     super.initState();
 
+    textController.text = widget.query;
     // Start listening to changes.
     //textController.addListener(_printLatestValue);
   }
@@ -39,6 +44,6 @@ class _SearchBarState extends State<SearchBar> {
   // }
 
   _search(String text) {
-    print(text);
+    Navigator.pushNamed(context, '/search', arguments: text);
   }
 }

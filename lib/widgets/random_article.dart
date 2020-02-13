@@ -5,12 +5,12 @@ import 'package:sakhatyla/widgets/header.dart';
 import 'package:sakhatyla/widgets/html_text.dart';
 import 'package:sakhatyla/services/api.dart';
 
-class RandomWord extends StatefulWidget {
+class RandomArticle extends StatefulWidget {
   @override
-  _RandomWordState createState() => _RandomWordState();
+  _RandomArticleState createState() => _RandomArticleState();
 }
 
-class _RandomWordState extends State<RandomWord> {
+class _RandomArticleState extends State<RandomArticle> {
   final Api _api = locator<Api>();
   Future<Article> article;
 

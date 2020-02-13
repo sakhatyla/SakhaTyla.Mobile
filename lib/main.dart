@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sakhatyla/common/theme.dart';
 import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/screens/home.dart';
+import 'package:sakhatyla/screens/search_result.dart';
 
 void main() {
   setupLocator();
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Home(),
+        '/search': (context) => SearchResult(query: ModalRoute.of(context).settings.arguments),
       },
     );
   }
