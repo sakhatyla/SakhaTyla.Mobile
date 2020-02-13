@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sakhatyla/screens/random_word.dart';
+import 'package:sakhatyla/widgets/random_word.dart';
+import 'package:sakhatyla/widgets/search_bar.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -18,6 +19,7 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: <Widget>[
+          SearchBar(),
           RandomWord(),
         ],
       ),

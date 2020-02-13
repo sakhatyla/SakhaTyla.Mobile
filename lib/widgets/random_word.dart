@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/models/article.dart';
-import 'package:sakhatyla/screens/header.dart';
-import 'package:sakhatyla/screens/html_text.dart';
+import 'package:sakhatyla/widgets/header.dart';
+import 'package:sakhatyla/widgets/html_text.dart';
 import 'package:sakhatyla/services/api.dart';
 
 class RandomWord extends StatefulWidget {
