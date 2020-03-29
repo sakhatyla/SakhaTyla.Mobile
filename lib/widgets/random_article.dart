@@ -13,14 +13,25 @@ class RandomArticle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Header('Random Article'),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Header('Random Article'),
+            )
+          ],
+        ),
         Card(
           child: BlocBuilder<RandomArticleBloc, RandomArticleState>(
             builder: (context, state) {
               //ignore: close_sinks
               final randomArticleBloc = BlocProvider.of<RandomArticleBloc>(context);
               if (state is RandomArticleLoading) {
-                return CircularProgressIndicator();
+                return Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Center(
+                    child: CircularProgressIndicator()
+                  ),
+                );
               } 
               if (state is RandomArticleSuccess) {
                 return Column(
