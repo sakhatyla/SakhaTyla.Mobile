@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sakhatyla/locator.dart';
+import 'package:sakhatyla/random_article_bloc/random_article_bloc.dart';
+import 'package:sakhatyla/services/api.dart';
 import 'package:sakhatyla/widgets/random_article.dart';
 import 'package:sakhatyla/widgets/search_bar.dart';
 
@@ -17,11 +21,14 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text("Sakha Tyla"),
       ),
-      body: Column(
-        children: <Widget>[
-          SearchBar(),
-          RandomArticle(),
-        ],
+      body: BlocProvider(
+        create: (context) => RandomArticleBloc(api: locator<Api>()),
+        child: Column(
+          children: <Widget>[
+            SearchBar(),
+            RandomArticle(),
+          ],
+        ),
       ),
     );
   }

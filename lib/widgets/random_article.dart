@@ -1,24 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:sakhatyla/locator.dart';
-import 'package:sakhatyla/models/article.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sakhatyla/random_article_bloc/random_article_bloc.dart';
+import 'package:sakhatyla/random_article_bloc/random_article_event.dart';
+import 'package:sakhatyla/random_article_bloc/random_article_state.dart';
 import 'package:sakhatyla/widgets/header.dart';
 import 'package:sakhatyla/widgets/html_text.dart';
-import 'package:sakhatyla/services/api.dart';
 
-class RandomArticle extends StatefulWidget {
-  @override
-  _RandomArticleState createState() => _RandomArticleState();
-}
-
-class _RandomArticleState extends State<RandomArticle> {
-  final Api _api = locator<Api>();
-  Future<Article> article;
-
-  @override
-  void initState() {
-    super.initState();
-    article = _api.getRandomArticle();
-  }
+class RandomArticle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -27,31 +15,39 @@ class _RandomArticleState extends State<RandomArticle> {
       children: <Widget>[
         Header('Random Article'),
         Card(
-          child: FutureBuilder<Article>(
-            future: article,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
+          child: BlocBuilder<RandomArticleBloc, RandomArticleState>(
+            builder: (context, state) {
+              //ignore: close_sinks
+              final randomArticleBloc = BlocProvider.of<RandomArticleBloc>(context);
+              if (state is RandomArticleLoading) {
+                return CircularProgressIndicator();
+              } 
+              if (state is RandomArticleSuccess) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     ListTile(
-                      title: Text(snapshot.data.title),
-                      subtitle: Text('${snapshot.data.fromLanguageName} ⮕ ${snapshot.data.toLanguageName}'),
+                      title: Text(state.article.title),
+                      subtitle: Text('${state.article.fromLanguageName} ⮕ ${state.article.toLanguageName}'),
                       trailing: IconButton(
                         icon: Icon(Icons.refresh),
-                        onPressed: _refresh,
+                        onPressed: () {
+                          randomArticleBloc.add(Load());
+                        },
                       )
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: HtmlText(snapshot.data.text),
+                      child: HtmlText(state.article.text),
                     )
                   ],
                 );
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
               }
-              return CircularProgressIndicator();
+              if (state is RandomArticleError) {
+                return Text('${state.error}');
+              }
+              randomArticleBloc.add(Load());
+              return Text('');
             }
           )
         )
@@ -59,11 +55,4 @@ class _RandomArticleState extends State<RandomArticle> {
     );
   }
 
-  void _refresh() {
-    setState(() {
-      article = _api.getRandomArticle();
-    });    
-  }
 }
-
-
