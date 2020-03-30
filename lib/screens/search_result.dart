@@ -4,10 +4,10 @@ import 'package:sakhatyla/blocs/search_result_bloc/search_result_bloc.dart';
 import 'package:sakhatyla/blocs/search_result_bloc/search_result_event.dart';
 import 'package:sakhatyla/blocs/search_result_bloc/search_result_state.dart';
 import 'package:sakhatyla/locator.dart';
-import 'package:sakhatyla/models/article.dart';
 import 'package:sakhatyla/models/translation.dart';
 import 'package:sakhatyla/services/api.dart';
 import 'package:sakhatyla/widgets/article_card.dart';
+import 'package:sakhatyla/widgets/header.dart';
 import 'package:sakhatyla/widgets/search_bar.dart';
 
 class SearchResult extends StatelessWidget {
@@ -20,7 +20,7 @@ class SearchResult extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sakha Tyla"),
+        title: Text('Sakha Tyla'),
       ),
       body: BlocProvider(
         create: (context) => SearchResultBloc(api: locator<Api>()),
@@ -37,9 +37,9 @@ class SearchResult extends StatelessWidget {
                   SearchBar(query: state.translation.query),
                   new Expanded(
                     child: ListView.builder(
-                      itemCount: state.translation.articles.fold(0, (int count, ArticleGroup group) => count + group.articles.length),
+                      itemCount: _getCount(state.translation),
                       itemBuilder: (BuildContext context, int index) {
-                        return ArticleCard(article: _getArticle(state.translation.articles, index));
+                        return _getItem(state.translation, index);
                       }
                     )
                   )
@@ -47,7 +47,7 @@ class SearchResult extends StatelessWidget {
               );
             }
             if (state is SearchResultError) {
-              return Text("${state.error}");
+              return Text('${state.error}');
             }
             searchResultBloc.add(Search(query: query));
             return Text('');
@@ -57,13 +57,26 @@ class SearchResult extends StatelessWidget {
     );
   }
 
-  Article _getArticle(List<ArticleGroup> articleGroups, int index) {
+  int _getCount(Translation translation) {
+    return translation.articles.fold(0, (int count, ArticleGroup group) => count + group.articles.length) + 
+      1 + // More translations
+      translation.moreArticles.length;
+  }
+
+  Widget _getItem(Translation translation, int index) {
     var count = 0;
-    for (var i = 0; i < articleGroups.length; i++) {
-      for (var j = 0; j < articleGroups[i].articles.length; j++) {
+    for (var i = 0; i < translation.articles.length; i++) {
+      for (var j = 0; j < translation.articles[i].articles.length; j++) {
         if (count++ == index)
-          return articleGroups[i].articles[j];
+          return ArticleCard(article: translation.articles[i].articles[j]);
       }
+    }
+    if (count++ == index) {
+      return Header('More translations');
+    }
+    for (var i = 0; i < translation.moreArticles.length; i++) {
+      if (count++ == index)
+        return ArticleCard(article: translation.moreArticles[i]);
     }
     return null;
   }
