@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sakhatyla/blocs/search_result_bloc/search_result_bloc.dart';
-import 'package:sakhatyla/blocs/search_result_bloc/search_result_event.dart';
-import 'package:sakhatyla/blocs/search_result_bloc/search_result_state.dart';
+import 'package:sakhatyla/blocs/search_result_bloc.dart';
 import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/models/translation.dart';
 import 'package:sakhatyla/services/api.dart';

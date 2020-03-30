@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sakhatyla/blocs/random_article_bloc/random_article_bloc.dart';
-import 'package:sakhatyla/blocs/random_article_bloc/random_article_event.dart';
-import 'package:sakhatyla/blocs/random_article_bloc/random_article_state.dart';
+import 'package:sakhatyla/blocs/random_article_bloc.dart';
 import 'package:sakhatyla/widgets/header.dart';
 import 'package:sakhatyla/widgets/html_text.dart';
 
