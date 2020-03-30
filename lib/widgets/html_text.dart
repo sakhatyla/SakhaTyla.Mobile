@@ -29,18 +29,19 @@ class HtmlText extends StatelessWidget {
   }
 
   TextStyle _getStyle(dom.Node node) {
-    FontWeight fontWeight = FontWeight.normal;
-    FontStyle fontStyle = FontStyle.normal;
     if (node is dom.Element) {
+      FontWeight fontWeight;
+      FontStyle fontStyle;
       if (node.localName == 'strong' || node.localName == 'b') {
         fontWeight = FontWeight.bold;
       } else if (node.localName == 'em' || node.localName == 'i') {
         fontStyle = FontStyle.italic;
       }
+      return TextStyle(
+        fontWeight: fontWeight,
+        fontStyle: fontStyle,
+      );
     }
-    return TextStyle(
-      fontWeight: fontWeight,
-      fontStyle: fontStyle,
-    );
+    return null;
   }
 }
