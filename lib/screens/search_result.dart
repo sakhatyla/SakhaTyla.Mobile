@@ -21,11 +21,9 @@ class SearchResult extends StatelessWidget {
         title: Text('Sakha Tyla'),
       ),
       body: BlocProvider(
-        create: (context) => SearchResultBloc(api: locator<Api>()),
+        create: (context) => SearchResultBloc(api: locator<Api>())..add(Search(query: query)),
         child: BlocBuilder<SearchResultBloc, SearchResultState>(
           builder: (context, state) {
-            //ignore: close_sinks
-            final searchResultBloc = BlocProvider.of<SearchResultBloc>(context);
             if (state is SearchResultLoading) {
               return CircularProgressIndicator();
             }
@@ -47,7 +45,6 @@ class SearchResult extends StatelessWidget {
             if (state is SearchResultError) {
               return Text('${state.error}');
             }
-            searchResultBloc.add(Search(query: query));
             return Text('');
           },
         ),

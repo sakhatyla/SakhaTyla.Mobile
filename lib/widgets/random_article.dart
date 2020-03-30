@@ -21,8 +21,6 @@ class RandomArticle extends StatelessWidget {
         Card(
           child: BlocBuilder<RandomArticleBloc, RandomArticleState>(
             builder: (context, state) {
-              //ignore: close_sinks
-              final randomArticleBloc = BlocProvider.of<RandomArticleBloc>(context);
               if (state is RandomArticleLoading) {
                 return Padding(
                   padding: EdgeInsets.all(16),
@@ -41,7 +39,7 @@ class RandomArticle extends StatelessWidget {
                       trailing: IconButton(
                         icon: Icon(Icons.refresh),
                         onPressed: () {
-                          randomArticleBloc.add(Load());
+                          BlocProvider.of<RandomArticleBloc>(context).add(Load());
                         },
                       )
                     ),
@@ -55,7 +53,6 @@ class RandomArticle extends StatelessWidget {
               if (state is RandomArticleError) {
                 return Text('${state.error}');
               }
-              randomArticleBloc.add(Load());
               return Text('');
             }
           )

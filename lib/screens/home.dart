@@ -22,7 +22,7 @@ class _HomeState extends State<Home> {
         title: Text("Sakha Tyla"),
       ),
       body: BlocProvider(
-        create: (context) => RandomArticleBloc(api: locator<Api>()),
+        create: (context) => RandomArticleBloc(api: locator<Api>())..add(Load()),
         child: Column(
           children: <Widget>[
             SearchBar(),
