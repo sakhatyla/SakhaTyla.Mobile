@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sakhatyla/blocs/home_bloc.dart';
 
 class SearchBar extends StatefulWidget {
   final String query;
@@ -25,6 +27,10 @@ class _SearchBarState extends State<SearchBar> {
     return TextField(
       controller: textController,
       onSubmitted: _search,
+      onChanged: (text) {
+        setState(() {
+        });
+      },
       decoration: InputDecoration(        
         hintText: 'Enter a text',
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -35,6 +41,7 @@ class _SearchBarState extends State<SearchBar> {
               setState(() {
                 textController.clear();
               });
+              _search("");
             },
           ) : null
       ),
@@ -48,6 +55,6 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   _search(String text) {
-    Navigator.pushNamed(context, '/search', arguments: text);
+    BlocProvider.of<HomeBloc>(context).add(Search(query: text));
   }
 }
