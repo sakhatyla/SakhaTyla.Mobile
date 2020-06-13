@@ -21,10 +21,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         yield HomeLoading();
         try {
           final translation = await api.getTranslation(event.query);
-          yield HomeSuccess(translation);
+          yield HomeSuccess(event.query, translation);
         } catch (error) {
           yield HomeError('error');
         }
+      }
+    } else if (event is Suggest) {
+      if (event.query.length >= 2) {
+        try {
+          final suggestions = await api.getSuggestions(event.query);
+          yield HomeSearching(suggestions);
+        } catch (error) {
+          yield HomeError('error');
+        }
+      } else {
+        yield HomeEmpty();
       }
     }
   }

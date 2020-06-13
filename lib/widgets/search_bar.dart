@@ -24,26 +24,37 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: textController,
-      onSubmitted: _search,
-      onChanged: (text) {
+    return BlocListener<HomeBloc, HomeState>(
+      listener: (context, state) {
         setState(() {
+          if (state is HomeSuccess) {
+            textController.text = state.query;
+          }          
         });
       },
-      decoration: InputDecoration(        
-        hintText: 'Enter a text',
-        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        suffixIcon: textController.text.length > 0 ? 
-          IconButton(
-            icon: Icon(Icons.clear), 
-            onPressed: () {
-              setState(() {
-                textController.clear();
-              });
-              _search("");
-            },
-          ) : null
+      child: TextField(
+        controller: textController,
+        onSubmitted: _search,
+        onChanged: (text) {
+          setState(() {
+          });
+          BlocProvider.of<HomeBloc>(context).add(Suggest(query: text));
+        },
+        decoration: InputDecoration(        
+          hintText: 'Enter a text',
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          suffixIcon: textController.text.length > 0 ? 
+            IconButton(
+              icon: Icon(Icons.clear), 
+              onPressed: () {
+                setState(() {
+                  // https://github.com/flutter/flutter/issues/17647
+                  WidgetsBinding.instance.addPostFrameCallback((_) => textController.clear());
+                });
+                _search("");
+              },
+            ) : null
+        ),
       ),
     );
   }

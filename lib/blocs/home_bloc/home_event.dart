@@ -12,3 +12,12 @@ class Search extends HomeEvent {
   @override
   List<Object> get props => [query];
 }
+
+class Suggest extends HomeEvent {
+  final String query;
+
+  const Suggest({this.query});
+
+  @override
+  List<Object> get props => [query];
+}
