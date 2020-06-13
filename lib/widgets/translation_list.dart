@@ -36,12 +36,12 @@ class TranslationList extends StatelessWidget {
       if (count++ == index)
         return Padding(
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-          child: Text("Nothing found"),
+          child: Text("Ничего не найдено"),
         );
     }
     if (translation.moreArticles.length > 0) {
       if (count++ == index) {
-        return Header('More translations');
+        return Header('Еще переводы');
       }
       for (var i = 0; i < translation.moreArticles.length; i++) {
         if (count++ == index)

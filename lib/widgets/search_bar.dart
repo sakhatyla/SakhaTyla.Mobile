@@ -41,7 +41,7 @@ class _SearchBarState extends State<SearchBar> {
           BlocProvider.of<HomeBloc>(context).add(Suggest(query: text));
         },
         decoration: InputDecoration(        
-          hintText: 'Enter a text',
+          hintText: 'Введите текст',
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           suffixIcon: textController.text.length > 0 ? 
             IconButton(

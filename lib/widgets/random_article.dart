@@ -14,7 +14,7 @@ class RandomArticle extends StatelessWidget {
         Row(
           children: <Widget>[
             Expanded(
-              child: Header('Random Article'),
+              child: Header('Случайная статья'),
             )
           ],
         ),
