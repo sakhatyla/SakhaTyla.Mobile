@@ -18,8 +18,6 @@ class _SearchBarState extends State<SearchBar> {
     super.initState();
 
     textController.text = widget.query;
-    // Start listening to changes.
-    //textController.addListener(_printLatestValue);
   }
 
   @override
@@ -27,8 +25,18 @@ class _SearchBarState extends State<SearchBar> {
     return TextField(
       controller: textController,
       onSubmitted: _search,
-      decoration: InputDecoration(
-        hintText: 'Enter a text'
+      decoration: InputDecoration(        
+        hintText: 'Enter a text',
+        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        suffixIcon: textController.text.length > 0 ? 
+          IconButton(
+            icon: Icon(Icons.clear), 
+            onPressed: () {
+              setState(() {
+                textController.clear();
+              });
+            },
+          ) : null
       ),
     );
   }
@@ -38,10 +46,6 @@ class _SearchBarState extends State<SearchBar> {
     textController.dispose();
     super.dispose();
   }
-
-  // _printLatestValue() {
-  //   print("Text field: ${textController.text}");
-  // }
 
   _search(String text) {
     Navigator.pushNamed(context, '/search', arguments: text);
