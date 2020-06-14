@@ -77,7 +77,7 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   _openKeyboardUrl() async {
-    const url = 'https://sakhatyla.ru/blogs/news/sakha-swiftkey-keyboard';
+    const url = 'https://sakhatyla.ru/pages/keyboard-android';
     if (await canLaunch(url)) {
       await launch(url);
     }
