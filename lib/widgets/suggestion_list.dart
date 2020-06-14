@@ -27,6 +27,7 @@ class SuggestionList extends StatelessWidget {
 
   Widget _getItem(List<Suggestion> suggestions, int index, BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         BlocProvider.of<HomeBloc>(context).add(Search(query: suggestions[index].title));
         FocusScope.of(context).unfocus();
