@@ -37,6 +37,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       } else {
         yield HomeEmpty();
       }
+    } else if (event is ToggleArtice) {
+      if (state is HomeSuccess) {
+        yield HomeSuccess((state as HomeSuccess).query, (state as HomeSuccess).translation.copyWith(toggleArticleId: event.id));
+      }
     }
   }
 

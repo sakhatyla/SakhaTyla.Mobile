@@ -11,7 +11,15 @@ class Translation {
     return Translation(
       query: json['Query'],
       articles: (json['Articles'] as List<dynamic>).map((dynamic a) => ArticleGroup.fromJson(a)).toList(),
-      moreArticles: (json['MoreArticles'] as List<dynamic>).map((dynamic a) => Article.fromJson(a)).toList(),
+      moreArticles: (json['MoreArticles'] as List<dynamic>).map((dynamic a) => Article.fromJson(a, collapsed: true)).toList(),
+    );
+  }
+
+  Translation copyWith({int toggleArticleId}) {
+    return Translation(
+      query: this.query,
+      articles: this.articles.map((g) => g.copyWith(toggleArticleId: toggleArticleId)).toList(),
+      moreArticles: this.moreArticles.map((a) => a.copyWith(toggleArticleId: toggleArticleId)).toList(),
     );
   }
 }
@@ -28,6 +36,14 @@ class ArticleGroup {
       fromLanguageName: json['FromLanguageName'],
       toLanguageName: json['ToLanguageName'],
       articles: (json['Articles'] as List<dynamic>).map((dynamic a) => Article.fromJson(a)).toList()
+    );
+  }
+
+  ArticleGroup copyWith({int toggleArticleId}) {
+    return ArticleGroup(
+      fromLanguageName: this.fromLanguageName,
+      toLanguageName: this.toLanguageName,
+      articles: this.articles.map((a) => a.copyWith(toggleArticleId: toggleArticleId)).toList(),
     );
   }
 }

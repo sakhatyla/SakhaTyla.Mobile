@@ -21,3 +21,12 @@ class Suggest extends HomeEvent {
   @override
   List<Object> get props => [query];
 }
+
+class ToggleArtice extends HomeEvent {
+  final int id;
+
+  const ToggleArtice(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
