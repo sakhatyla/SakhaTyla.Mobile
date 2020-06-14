@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:html/parser.dart' show parse;
+import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:sakhatyla/blocs/home_bloc.dart';
 import 'package:sakhatyla/models/article.dart';
 import 'package:sakhatyla/widgets/html_text.dart';
@@ -21,6 +23,7 @@ class _ArticleCardState extends State<ArticleCard> {
       onTap: () {
         BlocProvider.of<HomeBloc>(context).add(ToggleArtice(widget.article.id));
       },
+      onLongPress: _copyToClipboard,
       child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,6 +42,20 @@ class _ArticleCardState extends State<ArticleCard> {
         )
       ),
     );
+  }
+
+  _copyToClipboard() {
+    ClipboardManager.copyToClipBoard("${widget.article.title}\n${_removeHtmlTags(widget.article.text)}").then((result) {
+      final snackBar = SnackBar(
+        content: Text('Текст скопирован'),
+      );
+      Scaffold.of(context).showSnackBar(snackBar);
+    });
+  }
+
+  String _removeHtmlTags(String text) {
+    var document = parse(text);
+    return document.body.text;
   }
 }
 
