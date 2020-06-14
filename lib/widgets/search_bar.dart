@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sakhatyla/blocs/home_bloc.dart';
+import 'package:sakhatyla/utils/debouncer.dart';
 
 class SearchBar extends StatefulWidget {
   final String query;
@@ -15,6 +16,7 @@ class SearchBar extends StatefulWidget {
 class _SearchBarState extends State<SearchBar> {
 
   final textController = TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 500);
 
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _SearchBarState extends State<SearchBar> {
         onChanged: (text) {
           setState(() {
           });
-          BlocProvider.of<HomeBloc>(context).add(Suggest(query: text));
+          _debouncer.run(() => BlocProvider.of<HomeBloc>(context).add(Suggest(query: text)));
         },
         decoration: InputDecoration(        
           hintText: 'Введите текст',
