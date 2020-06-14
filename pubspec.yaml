@@ -28,6 +28,7 @@ dependencies:
   get_it: ^3.1.0
   flutter_bloc: ^3.2.0
   equatable: ^1.1.1
+  url_launcher: ^5.4.10
 
 dev_dependencies:
   flutter_test:

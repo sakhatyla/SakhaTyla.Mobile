@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:sakhatyla/blocs/home_bloc.dart';
 
 class SearchBar extends StatefulWidget {
@@ -53,7 +54,11 @@ class _SearchBarState extends State<SearchBar> {
                 });
                 _search("");
               },
-            ) : null
+            ) : 
+            IconButton(
+              icon: Icon(Icons.keyboard), 
+              onPressed: _openKeyboardUrl,
+            )
         ),
       ),
     );
@@ -67,5 +72,12 @@ class _SearchBarState extends State<SearchBar> {
 
   _search(String text) {
     BlocProvider.of<HomeBloc>(context).add(Search(query: text));
+  }
+
+  _openKeyboardUrl() async {
+    const url = 'https://sakhatyla.ru/blogs/news/sakha-swiftkey-keyboard';
+    if (await canLaunch(url)) {
+      await launch(url);
+    }
   }
 }
