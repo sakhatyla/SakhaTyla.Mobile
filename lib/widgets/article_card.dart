@@ -30,7 +30,7 @@ class _ArticleCardState extends State<ArticleCard> {
           children: <Widget>[
             ListTile(
               title: Text(widget.article.title),
-              subtitle: !widget.article.collapsed ? Text('${widget.article.fromLanguageName} ⮕ ${widget.article.toLanguageName}') : null,
+              subtitle: !widget.article.collapsed ? Text('${widget.article.fromLanguageName} → ${widget.article.toLanguageName}') : null,
             ),
             !widget.article.collapsed ? 
               Padding(

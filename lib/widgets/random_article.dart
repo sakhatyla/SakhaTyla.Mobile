@@ -35,7 +35,7 @@ class RandomArticle extends StatelessWidget {
                   children: <Widget>[
                     ListTile(
                       title: Text(state.article.title),
-                      subtitle: Text('${state.article.fromLanguageName} ⮕ ${state.article.toLanguageName}'),
+                      subtitle: Text('${state.article.fromLanguageName} → ${state.article.toLanguageName}'),
                       trailing: IconButton(
                         icon: Icon(Icons.refresh),
                         onPressed: () {
