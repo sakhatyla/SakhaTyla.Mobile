@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:sakhatyla/blocs/home_bloc.dart';
 import 'package:sakhatyla/models/article.dart';
 import 'package:sakhatyla/widgets/html_text.dart';
@@ -45,7 +45,7 @@ class _ArticleCardState extends State<ArticleCard> {
   }
 
   _copyToClipboard() {
-    ClipboardManager.copyToClipBoard("${widget.article.title}\n${_removeHtmlTags(widget.article.text)}").then((result) {
+    Clipboard.setData(ClipboardData(text: "${widget.article.title}\n${_removeHtmlTags(widget.article.text)}")).then((result) {
       final snackBar = SnackBar(
         content: Text('Текст скопирован'),
       );
