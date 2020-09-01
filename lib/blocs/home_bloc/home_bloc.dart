@@ -7,10 +7,7 @@ import 'package:sakhatyla/services/api.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final Api api;
 
-  HomeBloc({@required this.api});
-
-  @override
-  HomeState get initialState => HomeEmpty();
+  HomeBloc({@required this.api}) : super(HomeEmpty());
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
@@ -39,9 +36,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     } else if (event is ToggleArtice) {
       if (state is HomeSuccess) {
-        yield HomeSuccess((state as HomeSuccess).query, (state as HomeSuccess).translation.copyWith(toggleArticleId: event.id));
+        yield HomeSuccess(
+            (state as HomeSuccess).query,
+            (state as HomeSuccess)
+                .translation
+                .copyWith(toggleArticleId: event.id));
       }
     }
   }
-
 }

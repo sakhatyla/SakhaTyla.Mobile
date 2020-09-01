@@ -7,10 +7,7 @@ import 'package:sakhatyla/services/api.dart';
 class RandomArticleBloc extends Bloc<RandomArticleEvent, RandomArticleState> {
   final Api api;
 
-  RandomArticleBloc({@required this.api});
-
-  @override
-  RandomArticleState get initialState => RandomArticleEmpty();
+  RandomArticleBloc({@required this.api}) : super(RandomArticleEmpty());
 
   @override
   Stream<RandomArticleState> mapEventToState(RandomArticleEvent event) async* {
@@ -24,5 +21,4 @@ class RandomArticleBloc extends Bloc<RandomArticleEvent, RandomArticleState> {
       }
     }
   }
-
 }
