@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sakhatyla/common/theme.dart';
 import 'package:sakhatyla/locator.dart';
-import 'package:sakhatyla/screens/home.dart';
+import 'package:sakhatyla/home/view/home.dart';
 
 void main() {
   setupLocator();

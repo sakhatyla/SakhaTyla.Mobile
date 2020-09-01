@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sakhatyla/blocs/home_bloc.dart';
-import 'package:sakhatyla/models/suggestion.dart';
+import 'package:sakhatyla/home/home.dart';
+import 'package:sakhatyla/services/api/api.dart';
 
 class SuggestionList extends StatelessWidget {
   final List<Suggestion> suggestions;
@@ -14,7 +14,7 @@ class SuggestionList extends StatelessWidget {
       itemCount: _getCount(suggestions),
       itemBuilder: (BuildContext context, int index) {
         return _getItem(suggestions, index, context);
-      }, 
+      },
       separatorBuilder: (context, index) {
         return Divider();
       },
@@ -25,15 +25,17 @@ class SuggestionList extends StatelessWidget {
     return suggestions.length;
   }
 
-  Widget _getItem(List<Suggestion> suggestions, int index, BuildContext context) {
+  Widget _getItem(
+      List<Suggestion> suggestions, int index, BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        BlocProvider.of<HomeBloc>(context).add(Search(query: suggestions[index].title));
+        BlocProvider.of<HomeBloc>(context)
+            .add(Search(query: suggestions[index].title));
         FocusScope.of(context).unfocus();
       },
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20), 
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
         child: Text(suggestions[index].title),
       ),
     );

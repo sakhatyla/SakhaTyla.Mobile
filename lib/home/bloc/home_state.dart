@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:sakhatyla/models/suggestion.dart';
-import 'package:sakhatyla/models/translation.dart';
+import 'package:sakhatyla/services/api/api.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState();
@@ -13,7 +12,7 @@ class HomeEmpty extends HomeState {}
 
 class HomeSearching extends HomeState {
   final List<Suggestion> suggestions;
-  
+
   const HomeSearching(this.suggestions);
 
   @override

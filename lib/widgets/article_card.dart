@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:sakhatyla/blocs/home_bloc.dart';
-import 'package:sakhatyla/models/article.dart';
+import 'package:sakhatyla/home/home.dart';
+import 'package:sakhatyla/services/api/api.dart';
 import 'package:sakhatyla/widgets/html_text.dart';
 
 class ArticleCard extends StatefulWidget {
@@ -16,7 +16,6 @@ class ArticleCard extends StatefulWidget {
 }
 
 class _ArticleCardState extends State<ArticleCard> {
-  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -30,22 +29,29 @@ class _ArticleCardState extends State<ArticleCard> {
           children: <Widget>[
             ListTile(
               title: Text(widget.article.title),
-              subtitle: !widget.article.collapsed ? Text('${widget.article.fromLanguageName} → ${widget.article.toLanguageName}') : null,
+              subtitle: !widget.article.collapsed
+                  ? Text(
+                      '${widget.article.fromLanguageName} → ${widget.article.toLanguageName}')
+                  : null,
             ),
-            !widget.article.collapsed ? 
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: HtmlText(widget.article.text),
-              ) :
-              Container()
+            !widget.article.collapsed
+                ? Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: HtmlText(widget.article.text),
+                  )
+                : Container()
           ],
-        )
+        ),
       ),
     );
   }
 
   _copyToClipboard() {
-    Clipboard.setData(ClipboardData(text: "${widget.article.title}\n${_removeHtmlTags(widget.article.text)}")).then((result) {
+    Clipboard.setData(
+      ClipboardData(
+          text:
+              "${widget.article.title}\n${_removeHtmlTags(widget.article.text)}"),
+    ).then((result) {
       final snackBar = SnackBar(
         content: Text('Текст скопирован'),
       );
@@ -58,5 +64,3 @@ class _ArticleCardState extends State<ArticleCard> {
     return document.body.text;
   }
 }
-
-

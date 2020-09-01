@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sakhatyla/models/translation.dart';
+import 'package:sakhatyla/services/api/api.dart';
 import 'package:sakhatyla/widgets/article_card.dart';
 import 'package:sakhatyla/widgets/header.dart';
 
@@ -11,16 +11,22 @@ class TranslationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: _getCount(translation),
-      itemBuilder: (BuildContext context, int index) {
-        return _getItem(translation, index);
-      }
-    );
+        itemCount: _getCount(translation),
+        itemBuilder: (BuildContext context, int index) {
+          return _getItem(translation, index);
+        });
   }
 
   int _getCount(Translation translation) {
-    return (translation.articles.length > 0 ? translation.articles.fold(0, (int count, ArticleGroup group) => count + group.articles.length) : 1) + 
-      (translation.moreArticles.length > 0 ? translation.moreArticles.length + 1 : 0);
+    return (translation.articles.length > 0
+            ? translation.articles.fold(
+                0,
+                (int count, ArticleGroup group) =>
+                    count + group.articles.length)
+            : 1) +
+        (translation.moreArticles.length > 0
+            ? translation.moreArticles.length + 1
+            : 0);
   }
 
   Widget _getItem(Translation translation, int index) {
@@ -47,7 +53,7 @@ class TranslationList extends StatelessWidget {
         if (count++ == index)
           return ArticleCard(article: translation.moreArticles[i]);
       }
-    }    
+    }
     return null;
   }
 }

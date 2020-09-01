@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sakhatyla/blocs/home_bloc.dart';
+import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/locator.dart';
-import 'package:sakhatyla/blocs/random_article_bloc.dart';
-import 'package:sakhatyla/services/api.dart';
-import 'package:sakhatyla/widgets/random_article.dart';
-import 'package:sakhatyla/widgets/search_bar.dart';
-import 'package:sakhatyla/widgets/suggestion_list.dart';
-import 'package:sakhatyla/widgets/translation_list.dart';
+import 'package:sakhatyla/random_article/random_article.dart';
+import 'package:sakhatyla/services/api/api.dart';
+import 'package:sakhatyla/home/view/search_bar.dart';
+import 'package:sakhatyla/home/view/suggestion_list.dart';
+import 'package:sakhatyla/home/view/translation_list.dart';
 
 class Home extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,10 +18,11 @@ class Home extends StatelessWidget {
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => HomeBloc(api: locator<Api>())
+            create: (context) => HomeBloc(api: locator<ApiClient>()),
           ),
           BlocProvider(
-            create: (context) => RandomArticleBloc(api: locator<Api>())..add(Load())
+            create: (context) =>
+                RandomArticleBloc(api: locator<ApiClient>())..add(Load()),
           ),
         ],
         child: Column(
@@ -35,17 +34,13 @@ class Home extends StatelessWidget {
                   return RandomArticle();
                 }
                 if (state is HomeSearching) {
-                  return Expanded(
-                    child: SuggestionList(state.suggestions)
-                  );
+                  return Expanded(child: SuggestionList(state.suggestions));
                 }
                 if (state is HomeLoading) {
                   return CircularProgressIndicator();
                 }
                 if (state is HomeSuccess) {
-                  return Expanded(
-                    child: TranslationList(state.translation)
-                  );
+                  return Expanded(child: TranslationList(state.translation));
                 }
                 if (state is HomeError) {
                   return Text('${state.error}');

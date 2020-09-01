@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:sakhatyla/models/article.dart';
-import 'package:sakhatyla/models/suggestion.dart';
-import 'package:sakhatyla/models/translation.dart';
+import 'package:sakhatyla/services/api/api.dart';
 
-class Api {
+class ApiClient {
   static const endpoint = 'https://sakhatyla.ru';
 
   Future<Article> getRandomArticle() async {
@@ -35,7 +33,9 @@ class Api {
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      return (json.decode(response.body) as List<dynamic>).map((dynamic a) => Suggestion.fromJson(a)).toList();
+      return (json.decode(response.body) as List<dynamic>)
+          .map((dynamic a) => Suggestion.fromJson(a))
+          .toList();
     } else {
       throw Exception('Failed to get suggestions');
     }

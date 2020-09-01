@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:sakhatyla/blocs/home_bloc.dart';
+import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/utils/debouncer.dart';
 
 class SearchBar extends StatefulWidget {
@@ -14,7 +14,6 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-
   final textController = TextEditingController();
   final _debouncer = Debouncer(milliseconds: 500);
 
@@ -32,36 +31,36 @@ class _SearchBarState extends State<SearchBar> {
         setState(() {
           if (state is HomeSuccess) {
             textController.text = state.query;
-          }          
+          }
         });
       },
       child: TextField(
         controller: textController,
         onSubmitted: _search,
         onChanged: (text) {
-          setState(() {
-          });
-          _debouncer.run(() => BlocProvider.of<HomeBloc>(context).add(Suggest(query: text)));
+          setState(() {});
+          _debouncer.run(() =>
+              BlocProvider.of<HomeBloc>(context).add(Suggest(query: text)));
         },
-        decoration: InputDecoration(        
-          hintText: 'Введите текст',
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          suffixIcon: textController.text.length > 0 ? 
-            IconButton(
-              icon: Icon(Icons.clear), 
-              onPressed: () {
-                setState(() {
-                  // https://github.com/flutter/flutter/issues/17647
-                  WidgetsBinding.instance.addPostFrameCallback((_) => textController.clear());
-                });
-                _search("");
-              },
-            ) : 
-            IconButton(
-              icon: Icon(Icons.keyboard), 
-              onPressed: _openKeyboardUrl,
-            )
-        ),
+        decoration: InputDecoration(
+            hintText: 'Введите текст',
+            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            suffixIcon: textController.text.length > 0
+                ? IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () {
+                      setState(() {
+                        // https://github.com/flutter/flutter/issues/17647
+                        WidgetsBinding.instance.addPostFrameCallback(
+                            (_) => textController.clear());
+                      });
+                      _search("");
+                    },
+                  )
+                : IconButton(
+                    icon: Icon(Icons.keyboard),
+                    onPressed: _openKeyboardUrl,
+                  )),
       ),
     );
   }
