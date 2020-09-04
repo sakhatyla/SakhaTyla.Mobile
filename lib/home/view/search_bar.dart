@@ -15,7 +15,7 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   final textController = TextEditingController();
-  final _debouncer = Debouncer(milliseconds: 500);
+  final _debouncer = Debouncer(milliseconds: 200);
 
   @override
   void initState() {
@@ -72,6 +72,7 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   _search(String text) {
+    _debouncer.cancel();
     BlocProvider.of<HomeBloc>(context).add(Search(query: text));
   }
 
