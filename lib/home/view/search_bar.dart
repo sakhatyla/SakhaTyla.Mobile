@@ -29,7 +29,7 @@ class _SearchBarState extends State<SearchBar> {
     return BlocListener<HomeBloc, HomeState>(
       listener: (context, state) {
         setState(() {
-          if (state is HomeSuccess) {
+          if (state is HomeLoading) {
             textController.text = state.query;
           }
         });

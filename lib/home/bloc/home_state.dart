@@ -19,13 +19,18 @@ class HomeSearching extends HomeState {
   List<Object> get props => [suggestions];
 }
 
-class HomeLoading extends HomeState {}
+class HomeLoading extends HomeState {
+  final String query;
+
+  const HomeLoading(this.query);
+
+  List<Object> get props => [query];
+}
 
 class HomeSuccess extends HomeState {
-  final String query;
   final Translation translation;
 
-  const HomeSuccess(this.query, this.translation);
+  const HomeSuccess(this.translation);
 
   @override
   List<Object> get props => [translation];

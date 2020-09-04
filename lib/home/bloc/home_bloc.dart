@@ -14,10 +14,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (event.query.isEmpty) {
         yield HomeEmpty();
       } else {
-        yield HomeLoading();
+        yield HomeLoading(event.query);
         try {
           final translation = await api.getTranslation(event.query);
-          yield HomeSuccess(event.query, translation);
+          yield HomeSuccess(translation);
         } catch (error) {
           yield HomeError('error');
         }
@@ -35,11 +35,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     } else if (event is ToggleArtice) {
       if (state is HomeSuccess) {
-        yield HomeSuccess(
-            (state as HomeSuccess).query,
-            (state as HomeSuccess)
-                .translation
-                .copyWith(toggleArticleId: event.id));
+        yield HomeSuccess((state as HomeSuccess)
+            .translation
+            .copyWith(toggleArticleId: event.id));
       }
     }
   }
