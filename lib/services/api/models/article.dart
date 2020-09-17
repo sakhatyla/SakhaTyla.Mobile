@@ -1,15 +1,26 @@
 class Article {
-  final int id;  
+  final int id;
   final String title;
-  final String text;  
+  final String text;
   final String fromLanguageName;
   final String toLanguageName;
   final String categoryName;
   final bool collapsed;
 
-  Article({this.id, this.title, this.text, this.fromLanguageName, this.toLanguageName, this.categoryName, this.collapsed});
+  Article({
+    this.id,
+    this.title,
+    this.text,
+    this.fromLanguageName,
+    this.toLanguageName,
+    this.categoryName,
+    this.collapsed,
+  });
 
-  factory Article.fromJson(Map<String, dynamic> json, {bool collapsed = false}) {
+  factory Article.fromJson(
+    Map<String, dynamic> json, {
+    bool collapsed = false,
+  }) {
     return Article(
       id: json['Id'],
       title: json['Title'],
@@ -24,7 +35,7 @@ class Article {
   Article copyWith({int toggleArticleId}) {
     return Article(
       id: id,
-      title: title, 
+      title: title,
       text: text,
       fromLanguageName: fromLanguageName,
       toLanguageName: toLanguageName,
