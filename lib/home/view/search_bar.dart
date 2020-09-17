@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -77,8 +79,14 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   _openKeyboardUrl() async {
-    const url = 'https://sakhatyla.ru/pages/keyboard-android';
-    if (await canLaunch(url)) {
+    String url = '';
+    if (Platform.isAndroid) {
+      url = 'https://sakhatyla.ru/pages/keyboard-android';
+    } else if (Platform.isIOS) {
+      url = 'https://sakhatyla.ru/pages/keyboard-ios';
+    }
+
+    if (url != '' && await canLaunch(url)) {
       await launch(url);
     }
   }
