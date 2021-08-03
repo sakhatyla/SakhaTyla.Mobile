@@ -5,7 +5,7 @@ class Translation {
   final List<ArticleGroup> articles;
   final List<Article> moreArticles;
 
-  Translation({this.query, this.articles, this.moreArticles});
+  Translation({required this.query, required this.articles, required this.moreArticles});
 
   factory Translation.fromJson(Map<String, dynamic> json) {
     return Translation(
@@ -19,7 +19,7 @@ class Translation {
     );
   }
 
-  Translation copyWith({int toggleArticleId}) {
+  Translation copyWith({int? toggleArticleId}) {
     return Translation(
       query: this.query,
       articles: this
@@ -39,7 +39,7 @@ class ArticleGroup {
   final String toLanguageName;
   final List<Article> articles;
 
-  ArticleGroup({this.fromLanguageName, this.toLanguageName, this.articles});
+  ArticleGroup({required this.fromLanguageName, required this.toLanguageName, required this.articles});
 
   factory ArticleGroup.fromJson(Map<String, dynamic> json) {
     return ArticleGroup(
@@ -50,7 +50,7 @@ class ArticleGroup {
             .toList());
   }
 
-  ArticleGroup copyWith({int toggleArticleId}) {
+  ArticleGroup copyWith({int? toggleArticleId}) {
     return ArticleGroup(
       fromLanguageName: this.fromLanguageName,
       toLanguageName: this.toLanguageName,

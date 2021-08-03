@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/random_article/random_article.dart';
 import 'package:sakhatyla/services/api/api.dart';
@@ -6,7 +5,7 @@ import 'package:sakhatyla/services/api/api.dart';
 class RandomArticleBloc extends Bloc<RandomArticleEvent, RandomArticleState> {
   final ApiClient api;
 
-  RandomArticleBloc({@required this.api}) : super(RandomArticleEmpty());
+  RandomArticleBloc({required this.api}) : super(RandomArticleEmpty());
 
   @override
   Stream<RandomArticleState> mapEventToState(RandomArticleEvent event) async* {

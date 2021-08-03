@@ -44,7 +44,7 @@ class HtmlText extends StatelessWidget {
     return textSpans;
   }
 
-  List<String> _splitText(String text) {
+  List<String> _splitText(String? text) {
     final words = <String>[];
     if (text != null) {
       var start = 0;
@@ -68,15 +68,18 @@ class HtmlText extends StatelessWidget {
   _translate(String word, BuildContext context) {
     final match = wordRegExp.firstMatch(word);
     if (match != null) {
-      BlocProvider.of<HomeBloc>(context).add(Search(query: match.group(0)));
-      FocusScope.of(context).unfocus();
+      final result = match.group(0);
+      if (result != null) {
+        BlocProvider.of<HomeBloc>(context).add(Search(query: result));
+        FocusScope.of(context).unfocus();
+      }
     }
   }
 
-  TextStyle _getStyle(dom.Node node) {
+  TextStyle? _getStyle(dom.Node node) {
     if (node is dom.Element) {
-      FontWeight fontWeight;
-      FontStyle fontStyle;
+      FontWeight? fontWeight;
+      FontStyle? fontStyle;
       if (node.localName == 'strong' || node.localName == 'b') {
         fontWeight = FontWeight.bold;
       } else if (node.localName == 'em' || node.localName == 'i') {

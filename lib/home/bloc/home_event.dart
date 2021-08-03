@@ -7,7 +7,7 @@ abstract class HomeEvent extends Equatable {
 class Search extends HomeEvent {
   final String query;
 
-  const Search({this.query});
+  const Search({required this.query});
 
   @override
   List<Object> get props => [query];
@@ -16,7 +16,7 @@ class Search extends HomeEvent {
 class Suggest extends HomeEvent {
   final String query;
 
-  const Suggest({this.query});
+  const Suggest({required this.query});
 
   @override
   List<Object> get props => [query];

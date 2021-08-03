@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/services/api/api.dart';
@@ -6,7 +5,7 @@ import 'package:sakhatyla/services/api/api.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ApiClient api;
 
-  HomeBloc({@required this.api}) : super(HomeEmpty());
+  HomeBloc({required this.api}) : super(HomeEmpty());
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {

@@ -54,6 +54,6 @@ class TranslationList extends StatelessWidget {
           return ArticleCard(article: translation.moreArticles[i]);
       }
     }
-    return null;
+    return Container();
   }
 }

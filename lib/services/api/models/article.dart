@@ -4,17 +4,17 @@ class Article {
   final String text;
   final String fromLanguageName;
   final String toLanguageName;
-  final String categoryName;
+  final String? categoryName;
   final bool collapsed;
 
   Article({
-    this.id,
-    this.title,
-    this.text,
-    this.fromLanguageName,
-    this.toLanguageName,
+    required this.id,
+    required this.title,
+    required this.text,
+    required this.fromLanguageName,
+    required this.toLanguageName,
     this.categoryName,
-    this.collapsed,
+    required this.collapsed,
   });
 
   factory Article.fromJson(
@@ -32,7 +32,7 @@ class Article {
     );
   }
 
-  Article copyWith({int toggleArticleId}) {
+  Article copyWith({int? toggleArticleId}) {
     return Article(
       id: id,
       title: title,

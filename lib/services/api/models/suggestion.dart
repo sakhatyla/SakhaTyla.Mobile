@@ -2,7 +2,7 @@ class Suggestion {
   final int id;  
   final String title;
 
-  Suggestion({this.id, this.title});
+  Suggestion({required this.id, required this.title});
 
   factory Suggestion.fromJson(Map<String, dynamic> json) {
     return Suggestion(

@@ -7,7 +7,7 @@ import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/utils/debouncer.dart';
 
 class SearchBar extends StatefulWidget {
-  final String query;
+  final String? query;
 
   SearchBar({this.query});
 
@@ -23,7 +23,7 @@ class _SearchBarState extends State<SearchBar> {
   void initState() {
     super.initState();
 
-    textController.text = widget.query;
+    textController.text = widget.query ?? '';
   }
 
   @override
@@ -53,7 +53,7 @@ class _SearchBarState extends State<SearchBar> {
                     onPressed: () {
                       setState(() {
                         // https://github.com/flutter/flutter/issues/17647
-                        WidgetsBinding.instance.addPostFrameCallback(
+                        WidgetsBinding.instance?.addPostFrameCallback(
                             (_) => textController.clear());
                       });
                       _search("");

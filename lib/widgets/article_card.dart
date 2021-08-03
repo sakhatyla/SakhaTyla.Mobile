@@ -9,7 +9,7 @@ import 'package:sakhatyla/widgets/html_text.dart';
 class ArticleCard extends StatefulWidget {
   final Article article;
 
-  ArticleCard({this.article});
+  ArticleCard({required this.article});
 
   @override
   _ArticleCardState createState() => _ArticleCardState();
@@ -59,8 +59,8 @@ class _ArticleCardState extends State<ArticleCard> {
     });
   }
 
-  String _removeHtmlTags(String text) {
+  String? _removeHtmlTags(String text) {
     var document = parse(text);
-    return document.body.text;
+    return document.body?.text;
   }
 }
