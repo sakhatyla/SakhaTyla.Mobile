@@ -55,7 +55,7 @@ class _ArticleCardState extends State<ArticleCard> {
       final snackBar = SnackBar(
         content: Text('Текст скопирован'),
       );
-      Scaffold.of(context).showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
   }
 

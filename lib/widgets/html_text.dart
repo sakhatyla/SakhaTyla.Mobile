@@ -24,7 +24,7 @@ class HtmlText extends StatelessWidget {
   }
 
   List<TextSpan> _convert(dom.Node node, BuildContext context) {
-    final textSpans = List<TextSpan>();
+    final textSpans = <TextSpan>[];
     if (node.nodeType == dom.Node.TEXT_NODE) {
       final words = _splitText(node.text);
       for (var word in words) {
@@ -45,7 +45,7 @@ class HtmlText extends StatelessWidget {
   }
 
   List<String> _splitText(String text) {
-    final words = List<String>();
+    final words = <String>[];
     if (text != null) {
       var start = 0;
       var isWord = false;

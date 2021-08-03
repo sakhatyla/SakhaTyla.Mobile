@@ -6,7 +6,7 @@ class ApiClient {
   static const endpoint = 'https://sakhatyla.ru';
 
   Future<Article> getRandomArticle() async {
-    final response = await http.get('$endpoint/api/articles/random');
+    final response = await http.get(Uri.parse('$endpoint/api/articles/random'));
 
     if (response.statusCode == 200) {
       return Article.fromJson(json.decode(response.body));
