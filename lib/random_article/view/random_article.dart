@@ -42,7 +42,18 @@ class RandomArticle extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: HtmlText(state.article.text),
+                ),
+                state.article.categoryName != null &&
+                        state.article.categoryName!.isNotEmpty
+                    ? Padding(
+                        padding:
+                            EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                        child: Text(
+                            'Категория: ${state.article.categoryName}',
+                          style: TextStyle(fontStyle: FontStyle.italic)
+                        )
                 )
+                    : Container()
               ],
             );
           }
