@@ -39,6 +39,14 @@ class _ArticleCardState extends State<ArticleCard> {
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: HtmlText(widget.article.text),
                   )
+                : Container(),
+            !widget.article.collapsed &&
+                    widget.article.categoryName != null &&
+                    widget.article.categoryName!.isNotEmpty
+                ? Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                    child: Text('Категория: ${widget.article.categoryName}',
+                        style: TextStyle(fontStyle: FontStyle.italic)))
                 : Container()
           ],
         ),
