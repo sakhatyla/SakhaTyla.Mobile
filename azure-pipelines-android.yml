@@ -1,0 +1,83 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pr: none
+
+pool:
+  vmImage: 'macOS-latest'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Android
+    steps:
+    - task: FlutterInstall@0
+      displayName: Install Flutter
+      inputs:
+        channel: 'stable'
+        version: 'latest'
+
+    - task: DownloadSecureFile@1
+      displayName: Download dictionarykeystore
+      inputs:
+        secureFile: 'dictionarykeystore'
+
+    - task: file-creator@6
+      displayName: Create key.properties
+      inputs:
+        filepath: './android/key.properties'
+        filecontent: |
+          storePassword=$(android.storePassword)
+          keyPassword=$(android.keyPassword)
+          keyAlias=$(android.keyAlias)
+          storeFile=$(Agent.TempDirectory)/dictionarykeystore
+        fileoverwrite: true
+
+    - task: FlutterBuild@0
+      displayName: Build
+      inputs:
+        target: 'aab'
+        projectDirectory: '.'
+        buildNumber: 
+      
+    - task: CopyFiles@2
+      displayName: Copy aab
+      inputs:
+        SourceFolder: 'build/app/outputs/bundle/release'
+        Contents: '*.aab'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+
+    - task: PublishPipelineArtifact@1
+      displayName: Publish aab
+      inputs:
+        path: $(Build.ArtifactStagingDirectory)
+        artifact: android
+
+- stage: Publish
+  jobs:
+  - deployment: Internal
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: Internal
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: 'android'
+              targetPath: '$(Pipeline.Workspace)'
+
+          - task: GooglePlayReleaseBundle@3
+            displayName: Publish to Google Play Internal Test
+            inputs:
+              serviceConnection: 'Google Play'
+              applicationId: 'ru.bacr.dictionary'
+              bundleFile: '$(Pipeline.Workspace)/**/*.aab'
+              track: 'internal'
+              languageCode: 'ru-RU'
