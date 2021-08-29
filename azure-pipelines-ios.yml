@@ -87,7 +87,7 @@ stages:
           - task: AppStoreRelease@1
             inputs:
               serviceEndpoint: 'App Store'
-              appIdentifier: 'app.sakhamusic'
+              appIdentifier: 'ru.sakhatyla.app'
               appType: 'iOS'
               ipaPath: '$(Pipeline.Workspace)/ios/*.ipa'
               releaseTrack: 'TestFlight'
