@@ -46,14 +46,12 @@ stages:
     
     - task: Xcode@5
       displayName: Archive
-      inputs:        
+      inputs:
         actions: 'archive'
         xcWorkspacePath: '**/Runner.xcworkspace'
         scheme: 'Runner'
         packageApp: true
-        signingOption: 'manual'
-        signingIdentity: 'Apple Distribution: Vassily Ivanov (898MZ6K4Y5)'
-        provisioningProfileName: 'SakhaTyla'
+        signingOption: 'auto'
       
     - task: CopyFiles@2
       displayName: Copy ipa
