@@ -51,7 +51,9 @@ stages:
         xcWorkspacePath: '**/Runner.xcworkspace'
         scheme: 'Runner'
         packageApp: true
-        signingOption: 'auto'
+        signingOption: 'manual'
+        signingIdentity: 'Apple Distribution: Vassily Ivanov (898MZ6K4Y5)'
+        provisioningProfileName: 'SakhaTyla'
       
     - task: CopyFiles@2
       displayName: Copy ipa
