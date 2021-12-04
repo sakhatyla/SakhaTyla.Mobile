@@ -3,22 +3,27 @@ import 'package:path/path.dart';
 
 
 class AppDatabase {
+  Future<Database>? _db;
 
+  // https://github.com/tekartik/sqflite/blob/master/sqflite/doc/opening_db.md
   Future<Database> _getDatabase() async {
-    return openDatabase(
-      join(await getDatabasesPath(), 'sakhatyla.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          '''
+    if (_db == null) {
+      _db = openDatabase(
+        join(await getDatabasesPath(), 'sakhatyla.db'),
+        onCreate: (db, version) {
+          return db.execute(
+            '''
         CREATE TABLE "last_query" (
 	        "query"	TEXT NOT NULL UNIQUE,
 	        "timestamp"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
         ''',
-        );
-      },
-      version: 1,
-    );
+          );
+        },
+        version: 1,
+      );
+    }
+    return _db!;
   }
 
   Future<void> addLastQuery(String query) async {
