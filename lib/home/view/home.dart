@@ -4,6 +4,7 @@ import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/random_article/random_article.dart';
 import 'package:sakhatyla/services/api/api.dart';
+import 'package:sakhatyla/services/database/database.dart';
 import 'package:sakhatyla/home/view/search_bar.dart';
 import 'package:sakhatyla/home/view/suggestion_list.dart';
 import 'package:sakhatyla/home/view/translation_list.dart';
@@ -18,7 +19,10 @@ class Home extends StatelessWidget {
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => HomeBloc(api: locator<ApiClient>()),
+            create: (context) => HomeBloc(
+              api: locator<ApiClient>(),
+              database: locator<AppDatabase>()
+            ),
           ),
           BlocProvider(
             create: (context) =>

@@ -38,6 +38,11 @@ class _SearchBarState extends State<SearchBar> {
       },
       child: TextField(
         controller: textController,
+        onTap: () {
+          if (textController.text.isEmpty) {
+            BlocProvider.of<HomeBloc>(context).add(LastQuery());
+          }
+        },
         onSubmitted: _search,
         onChanged: (text) {
           setState(() {});
@@ -75,7 +80,7 @@ class _SearchBarState extends State<SearchBar> {
 
   _search(String text) {
     _debouncer.cancel();
-    BlocProvider.of<HomeBloc>(context).add(Search(query: text));
+    BlocProvider.of<HomeBloc>(context).add(Search(query: text, fromSearchBar: true));
   }
 
   _openKeyboardUrl() async {
