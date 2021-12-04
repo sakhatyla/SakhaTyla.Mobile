@@ -36,6 +36,12 @@ class AppDatabase {
         },
         conflictAlgorithm: ConflictAlgorithm.replace
     );
+
+    database.execute(
+      '''
+      DELETE FROM last_query WHERE timestamp < (SELECT timestamp FROM last_query ORDER BY timestamp DESC LIMIT 1 OFFSET 9);
+      '''
+    );
   }
 
   Future<List<String>> getLastQueries() async {
@@ -43,8 +49,7 @@ class AppDatabase {
     final List<Map<String, dynamic>> maps = await database.query(
         'last_query',
         columns: ['query'],
-        orderBy: 'timestamp DESC',
-        limit: 10
+        orderBy: 'timestamp DESC'
     );
     return List.generate(maps.length, (i) {
       return maps[i]['query'];
