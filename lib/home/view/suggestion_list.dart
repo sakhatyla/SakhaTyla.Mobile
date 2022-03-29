@@ -31,7 +31,7 @@ class SuggestionList extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         BlocProvider.of<HomeBloc>(context)
-            .add(Search(query: suggestions[index].title, fromSearchBar: false));
+            .add(Search(query: suggestions[index].title));
         FocusScope.of(context).unfocus();
       },
       child: Padding(

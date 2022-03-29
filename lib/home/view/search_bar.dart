@@ -80,7 +80,7 @@ class _SearchBarState extends State<SearchBar> {
 
   _search(String text) {
     _debouncer.cancel();
-    BlocProvider.of<HomeBloc>(context).add(Search(query: text, fromSearchBar: true));
+    BlocProvider.of<HomeBloc>(context).add(Search(query: text));
   }
 
   _openKeyboardUrl() async {

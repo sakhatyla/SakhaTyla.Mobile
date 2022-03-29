@@ -70,7 +70,7 @@ class HtmlText extends StatelessWidget {
     if (match != null) {
       final result = match.group(0);
       if (result != null) {
-        BlocProvider.of<HomeBloc>(context).add(Search(query: result, fromSearchBar: false));
+        BlocProvider.of<HomeBloc>(context).add(Search(query: result));
         FocusScope.of(context).unfocus();
       }
     }

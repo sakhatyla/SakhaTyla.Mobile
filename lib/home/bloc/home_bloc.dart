@@ -15,9 +15,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (event.query.isEmpty) {
         yield HomeEmpty();
       } else {
-        if (event.fromSearchBar) {
-          database.addLastQuery(event.query);
-        }
+        database.addLastQuery(event.query);
         yield HomeLoading(event.query);
         try {
           final translation = await api.getTranslation(event.query);
