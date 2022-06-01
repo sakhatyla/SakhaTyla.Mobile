@@ -39,9 +39,7 @@ class _SearchBarState extends State<SearchBar> {
       child: TextField(
         controller: textController,
         onTap: () {
-          if (textController.text.isEmpty) {
-            BlocProvider.of<HomeBloc>(context).add(LastQuery());
-          }
+          BlocProvider.of<HomeBloc>(context).add(LastQuery());
         },
         onSubmitted: _search,
         onChanged: (text) {
@@ -52,7 +50,8 @@ class _SearchBarState extends State<SearchBar> {
         decoration: InputDecoration(
             hintText: 'Введите текст',
             contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            suffixIcon: textController.text.length > 0
+            suffixIcon: textController.text.length > 0 ||
+                BlocProvider.of<HomeBloc>(context).state is HomeHistory
                 ? IconButton(
                     icon: Icon(Icons.clear),
                     onPressed: () {

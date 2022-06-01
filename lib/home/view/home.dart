@@ -40,6 +40,9 @@ class Home extends StatelessWidget {
                 if (state is HomeSearching) {
                   return Expanded(child: SuggestionList(state.suggestions));
                 }
+                if (state is HomeHistory) {
+                  return Expanded(child: SuggestionList(state.suggestions));
+                }
                 if (state is HomeLoading) {
                   return CircularProgressIndicator();
                 }

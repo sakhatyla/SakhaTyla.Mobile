@@ -47,7 +47,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (queries.isEmpty) {
         yield HomeEmpty();
       } else {
-        yield HomeSearching(List.generate(
+        yield HomeHistory(List.generate(
                 queries.length,
                 (i) => Suggestion(id: 0, title: queries[i])
         ));
