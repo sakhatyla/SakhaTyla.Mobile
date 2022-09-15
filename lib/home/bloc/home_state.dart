@@ -19,6 +19,15 @@ class HomeSearching extends HomeState {
   List<Object> get props => [suggestions];
 }
 
+class HomeHistory extends HomeState {
+  final List<Suggestion> suggestions;
+
+  const HomeHistory(this.suggestions);
+
+  @override
+  List<Object> get props => [suggestions];
+}
+
 class HomeLoading extends HomeState {
   final String query;
 

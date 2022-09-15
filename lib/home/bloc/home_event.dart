@@ -30,3 +30,9 @@ class ToggleArtice extends HomeEvent {
   @override
   List<Object> get props => [id];
 }
+
+class LastQuery extends HomeEvent {
+
+  @override
+  List<Object> get props => [];
+}
