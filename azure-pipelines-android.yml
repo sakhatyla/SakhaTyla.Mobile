@@ -73,12 +73,13 @@ stages:
               buildType: 'current'
               artifactName: 'android'
               targetPath: '$(Pipeline.Workspace)'
-
-          - task: GooglePlayReleaseBundle@3
+              
+          - task: GooglePlayRelease@4
             displayName: Publish to Google Play Internal Test
             inputs:
               serviceConnection: 'Google Play'
               applicationId: 'ru.bacr.dictionary'
+              action: 'SingleBundle'
               bundleFile: '$(Pipeline.Workspace)/**/*.aab'
               track: 'internal'
               languageCode: 'ru-RU'
