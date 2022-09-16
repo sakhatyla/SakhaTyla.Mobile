@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/utils/debouncer.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SearchBar extends StatefulWidget {
   final String? query;
@@ -51,7 +51,7 @@ class _SearchBarState extends State<SearchBar> {
             hintText: 'Введите текст',
             contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             suffixIcon: textController.text.length > 0 ||
-                BlocProvider.of<HomeBloc>(context).state is HomeHistory
+                    BlocProvider.of<HomeBloc>(context).state is HomeHistory
                 ? IconButton(
                     icon: Icon(Icons.clear),
                     onPressed: () {
@@ -90,8 +90,8 @@ class _SearchBarState extends State<SearchBar> {
       url = 'https://sakhatyla.ru/pages/keyboard-ios';
     }
 
-    if (url != '' && await canLaunch(url)) {
-      await launch(url);
+    if (url != '' && await canLaunchUrlString(url)) {
+      await launchUrlString(url);
     }
   }
 }
