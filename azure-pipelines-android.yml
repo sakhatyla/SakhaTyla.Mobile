@@ -18,8 +18,10 @@ stages:
     - task: FlutterInstall@0
       displayName: Install Flutter
       inputs:
+        mode: 'auto'
         channel: 'stable'
-        version: 'latest'
+        version: 'custom'
+        customVersion: '2.10'
 
     - task: DownloadSecureFile@1
       displayName: Download dictionarykeystore
@@ -42,7 +44,6 @@ stages:
       inputs:
         target: 'aab'
         projectDirectory: '.'
-        buildNumber: 
       
     - task: CopyFiles@2
       displayName: Copy aab
