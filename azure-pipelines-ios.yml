@@ -22,8 +22,10 @@ stages:
     - task: FlutterInstall@0
       displayName: Install Flutter
       inputs:
+        mode: 'auto'
         channel: 'stable'
-        version: 'latest'
+        version: 'custom'
+        customVersion: '2.10.5'
     
     - task: InstallAppleCertificate@2
       inputs:
