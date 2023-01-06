@@ -5,18 +5,15 @@ import 'package:sakhatyla/services/api/api.dart';
 class RandomArticleBloc extends Bloc<RandomArticleEvent, RandomArticleState> {
   final ApiClient api;
 
-  RandomArticleBloc({required this.api}) : super(RandomArticleEmpty());
-
-  @override
-  Stream<RandomArticleState> mapEventToState(RandomArticleEvent event) async* {
-    if (event is Load) {
-      yield RandomArticleLoading();
+  RandomArticleBloc({required this.api}) : super(RandomArticleEmpty()) {
+    on<Load>((event, emit) async {
+      emit(RandomArticleLoading());
       try {
         final article = await api.getRandomArticle();
-        yield RandomArticleSuccess(article);
+        emit(RandomArticleSuccess(article));
       } catch (error) {
-        yield RandomArticleError('error');
+        emit(RandomArticleError('error'));
       }
-    }
+    });
   }
 }

@@ -7,51 +7,51 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ApiClient api;
   final AppDatabase database;
 
-  HomeBloc({required this.api, required this.database}) : super(HomeEmpty());
-
-  @override
-  Stream<HomeState> mapEventToState(HomeEvent event) async* {
-    if (event is Search) {
+  HomeBloc({required this.api, required this.database}) : super(HomeEmpty()) {
+    on<Search>((event, emit) async {
       if (event.query.isEmpty) {
-        yield HomeEmpty();
+        emit(HomeEmpty());
       } else {
         database.addLastQuery(event.query);
-        yield HomeLoading(event.query);
+        emit(HomeLoading(event.query));
         try {
           final translation = await api.getTranslation(event.query);
-          yield HomeSuccess(translation);
+          emit(HomeSuccess(translation));
         } catch (error) {
-          yield HomeError('error');
+          emit(HomeError('error'));
         }
       }
-    } else if (event is Suggest) {
+    });
+    on<Suggest>((event, emit) async {
       if (event.query.length >= 2) {
         try {
           final suggestions = await api.getSuggestions(event.query);
-          yield HomeSearching(suggestions);
+          emit(HomeSearching(suggestions));
         } catch (error) {
-          yield HomeError('error');
+          emit(HomeError('error'));
         }
       } else {
-        yield HomeEmpty();
+        emit(HomeEmpty());
       }
-    } else if (event is ToggleArtice) {
+    });
+    on<ToggleArticle>((event, emit) {
       if (state is HomeSuccess) {
-        yield HomeSuccess((state as HomeSuccess)
+        emit(HomeSuccess((state as HomeSuccess)
             .translation
-            .copyWith(toggleArticleId: event.id));
+            .copyWith(toggleArticleId: event.id)));
       }
-    } else if (event is LastQuery) {
-      yield HomeEmpty();
+    });
+    on<LastQuery>((event, emit) async {
+      emit(HomeEmpty());
       final queries = await database.getLastQueries();
       if (queries.isEmpty) {
-        yield HomeEmpty();
+        emit(HomeEmpty());
       } else {
-        yield HomeHistory(List.generate(
-                queries.length,
-                (i) => Suggestion(id: 0, title: queries[i])
-        ));
+        emit(HomeHistory(List.generate(
+          queries.length,
+          (i) => Suggestion(id: 0, title: queries[i]),
+        )));
       }
-    }
+    });
   }
 }

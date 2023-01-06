@@ -20,7 +20,8 @@ class _ArticleCardState extends State<ArticleCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        BlocProvider.of<HomeBloc>(context).add(ToggleArtice(widget.article.id));
+        BlocProvider.of<HomeBloc>(context)
+            .add(ToggleArticle(widget.article.id));
       },
       onLongPress: _copyToClipboard,
       child: Card(
