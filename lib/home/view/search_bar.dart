@@ -57,7 +57,7 @@ class _SearchBarState extends State<SearchBar> {
                     onPressed: () {
                       setState(() {
                         // https://github.com/flutter/flutter/issues/17647
-                        WidgetsBinding.instance?.addPostFrameCallback(
+                        WidgetsBinding.instance.addPostFrameCallback(
                             (_) => textController.clear());
                       });
                       _search("");
