@@ -35,10 +35,7 @@ class TranslationList extends StatelessWidget {
       for (var i = 0; i < translation.articles.length; i++) {
         for (var j = 0; j < translation.articles[i].articles.length; j++) {
           if (count++ == index)
-            return ArticleCard(
-                article: translation.articles[i].articles[j],
-                isFavorite: false
-            );
+            return ArticleCard(article: translation.articles[i].articles[j]);
         }
       }
     } else {
@@ -54,10 +51,7 @@ class TranslationList extends StatelessWidget {
       }
       for (var i = 0; i < translation.moreArticles.length; i++) {
         if (count++ == index)
-          return ArticleCard(
-              article: translation.moreArticles[i],
-              isFavorite: false
-          );
+          return ArticleCard(article: translation.moreArticles[i]);
       }
     }
     return Container();

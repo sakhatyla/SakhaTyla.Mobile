@@ -1,3 +1,4 @@
+import 'package:sakhatyla/services/api/api.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -20,7 +21,23 @@ class AppDatabase {
         ''',
           );
         },
-        version: 1,
+        onUpgrade: (db, oldVersion, newVersion) {
+          if (newVersion == 2) {
+              return db.execute(
+                '''
+                CREATE TABLE "favorite_word" (
+                  "id" INTEGER NOT NULL UNIQUE,
+	                "title"	TEXT NOT NULL,
+	                "text" TEXT NOT NULL,
+	                "from" TEXT NOT NULL,
+	                "to" TEXT NOT NULL,
+	                "category" TEXT
+                );
+                '''
+              );
+          }
+        },
+        version: 2,
       );
     }
     return _db!;
@@ -54,5 +71,37 @@ class AppDatabase {
     return List.generate(maps.length, (i) {
       return maps[i]['query'];
     });
+  }
+
+  Future<void> addFavoriteArticle(Article article) async {
+    final database = await _getDatabase();
+    await database.insert(
+        'favorite_word',
+        {
+          'id': article.id,
+          'title': article.title,
+          'text': article.text,
+          'from': article.fromLanguageName,
+          'to': article.toLanguageName,
+          'category': article.categoryName
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace
+    );
+  }
+
+  Future<void> removeFavoriteArticle(int id) async {
+    final database = await _getDatabase();
+    await database.delete('favorite_word', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<bool> isArticleFavorite(int id) async {
+    final database = await _getDatabase();
+    final List<Map<String, dynamic>> maps = await database.query(
+        'favorite_word',
+        columns: ['id'],
+        where: 'id = ?',
+        whereArgs: [id]
+    );
+    return maps.isNotEmpty;
   }
 }
