@@ -8,8 +8,12 @@ import 'package:sakhatyla/widgets/html_text.dart';
 
 class ArticleCard extends StatefulWidget {
   final Article article;
+  final bool isFavorite;
 
-  ArticleCard({required this.article});
+  ArticleCard({
+    required this.article,
+    required this.isFavorite
+  });
 
   @override
   _ArticleCardState createState() => _ArticleCardState();
@@ -34,6 +38,15 @@ class _ArticleCardState extends State<ArticleCard> {
                   ? Text(
                       '${widget.article.fromLanguageName} → ${widget.article.toLanguageName}')
                   : null,
+              trailing: IconButton(
+                icon: Icon(widget.isFavorite ? Icons.star : Icons.star_border),
+                onPressed: () {
+                  BlocProvider.of<HomeBloc>(context).add(ClickFavorite(
+                      article: widget.article,
+                      isFavorite: widget.isFavorite
+                  ));
+                },
+              ),
             ),
             !widget.article.collapsed
                 ? Padding(

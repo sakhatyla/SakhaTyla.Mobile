@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:sakhatyla/services/api/api.dart';
 
 abstract class HomeEvent extends Equatable {
   const HomeEvent();
@@ -34,4 +35,17 @@ class ToggleArticle extends HomeEvent {
 class LastQuery extends HomeEvent {
   @override
   List<Object> get props => [];
+}
+
+class ClickFavorite extends HomeEvent {
+  final Article article;
+  final bool isFavorite;
+
+  const ClickFavorite({
+    required this.article,
+    required this.isFavorite
+  });
+
+  @override
+  List<Object> get props => [article];
 }
