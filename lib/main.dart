@@ -36,12 +36,6 @@ class Main extends StatefulWidget {
 
 class MainState extends State<Main> {
   int _selectedIndex = 0;
-  Home _home = Home(
-      HomeBloc(
-          api: locator<ApiClient>(),
-          database: locator<AppDatabase>()
-      )
-  );
 
   void _onItemTapped(int index) {
     setState(() {
@@ -55,7 +49,12 @@ class MainState extends State<Main> {
       appBar: AppBar(
         title: Text("Саха Тыла"),
       ),
-      body: _selectedIndex == 0 ? _home : FavoriteList(),
+      body: _selectedIndex == 0 ? Home(
+          HomeBloc(
+              api: locator<ApiClient>(),
+              database: locator<AppDatabase>()
+          )
+      ) : FavoriteList(),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
