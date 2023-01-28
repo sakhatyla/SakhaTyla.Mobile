@@ -6,36 +6,46 @@ import 'package:path/path.dart';
 class AppDatabase {
   Future<Database>? _db;
 
+  void _createTableFavoriteV2(Batch batch) {
+    batch.execute(
+      '''
+      CREATE TABLE "favorite_word" (
+          "id" INTEGER NOT NULL UNIQUE,
+          "title"	TEXT NOT NULL,
+	        "text" TEXT NOT NULL,
+	        "from" TEXT NOT NULL,
+	        "to" TEXT NOT NULL,
+	        "category" TEXT,
+	        "timestamp"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+      '''
+    );
+  }
+
   // https://github.com/tekartik/sqflite/blob/master/sqflite/doc/opening_db.md
   Future<Database> _getDatabase() async {
     if (_db == null) {
       _db = openDatabase(
         join(await getDatabasesPath(), 'sakhatyla.db'),
-        onCreate: (db, version) {
-          return db.execute(
-            '''
-        CREATE TABLE "last_query" (
-	        "query"	TEXT NOT NULL UNIQUE,
-	        "timestamp"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );
-        ''',
+        onCreate: (db, version) async {
+          var batch = db.batch();
+          batch.execute(
+          '''
+            CREATE TABLE "last_query" (
+	          "query"	TEXT NOT NULL UNIQUE,
+	          "timestamp"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
           );
+          '''
+          );
+          _createTableFavoriteV2(batch);
+          await batch.commit();
         },
-        onUpgrade: (db, oldVersion, newVersion) {
+        onUpgrade: (db, oldVersion, newVersion) async {
+          var batch = db.batch();
           if (newVersion == 2) {
-              return db.execute(
-                '''
-                CREATE TABLE "favorite_word" (
-                  "id" INTEGER NOT NULL UNIQUE,
-	                "title"	TEXT NOT NULL,
-	                "text" TEXT NOT NULL,
-	                "from" TEXT NOT NULL,
-	                "to" TEXT NOT NULL,
-	                "category" TEXT
-                );
-                '''
-              );
+            _createTableFavoriteV2(batch);
           }
+          await batch.commit();
         },
         version: 2,
       );
@@ -109,8 +119,7 @@ class AppDatabase {
     final database = await _getDatabase();
     final List<Map<String, dynamic>> maps = await database.query(
         'favorite_word',
-        // columns: ['query'],
-        // orderBy: 'timestamp DESC'
+        orderBy: 'timestamp DESC'
     );
     return List.generate(maps.length, (i) {
       var article = maps[i];

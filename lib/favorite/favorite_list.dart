@@ -20,7 +20,7 @@ class FavoriteList extends StatelessWidget {
           if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
             return Container(
                 child: Center(
-                  child: Text('Тыл эбэ иликкит')
+                  child: Text('Кураанах')
                 )
             );
           }
