@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sakhatyla/common/theme.dart';
+import 'package:sakhatyla/favorite/favorite_list.dart';
+import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/home/view/home.dart';
+import 'package:sakhatyla/services/api/api.dart';
+import 'package:sakhatyla/services/database/database.dart';
 
 void main() {
   setupLocator();
@@ -32,10 +36,12 @@ class Main extends StatefulWidget {
 
 class MainState extends State<Main> {
   int _selectedIndex = 0;
-  List<Widget> _screens = <Widget>[
-    Home(),
-    Text('Тылларым'),
-  ];
+  Home _home = Home(
+      HomeBloc(
+          api: locator<ApiClient>(),
+          database: locator<AppDatabase>()
+      )
+  );
 
   void _onItemTapped(int index) {
     setState(() {
@@ -49,7 +55,7 @@ class MainState extends State<Main> {
       appBar: AppBar(
         title: Text("Саха Тыла"),
       ),
-      body: _screens[_selectedIndex],
+      body: _selectedIndex == 0 ? _home : FavoriteList(),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(

@@ -104,4 +104,24 @@ class AppDatabase {
     );
     return maps.isNotEmpty;
   }
+
+  Future<List<Article>> getFavoriteArticles() async {
+    final database = await _getDatabase();
+    final List<Map<String, dynamic>> maps = await database.query(
+        'favorite_word',
+        // columns: ['query'],
+        // orderBy: 'timestamp DESC'
+    );
+    return List.generate(maps.length, (i) {
+      var article = maps[i];
+      return Article(
+          id: article['id'],
+          title: article['title'],
+          text: article['text'],
+          fromLanguageName: article['from'],
+          toLanguageName: article['to'],
+          collapsed: false
+      );
+    });
+  }
 }
