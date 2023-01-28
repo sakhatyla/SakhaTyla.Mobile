@@ -12,16 +12,13 @@ import 'package:sakhatyla/home/view/translation_list.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Саха Тыла"),
-      ),
-      body: MultiBlocProvider(
+    return Container(
+      child: MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => HomeBloc(
-              api: locator<ApiClient>(),
-              database: locator<AppDatabase>()
+                api: locator<ApiClient>(),
+                database: locator<AppDatabase>()
             ),
           ),
           BlocProvider(
