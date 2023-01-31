@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:sakhatyla/services/api/api.dart';
 
 abstract class HomeEvent extends Equatable {
   const HomeEvent();
