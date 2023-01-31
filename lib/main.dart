@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/common/theme.dart';
 import 'package:sakhatyla/favorite/favorite_list.dart';
 import 'package:sakhatyla/home/home.dart';
@@ -28,13 +29,12 @@ class MyApp extends StatelessWidget {
 }
 
 class Main extends StatefulWidget {
-  const Main();
 
   @override
-  State<Main> createState() => MainState();
+  State<Main> createState() => _MainState();
 }
 
-class MainState extends State<Main> {
+class _MainState extends State<Main> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -49,12 +49,19 @@ class MainState extends State<Main> {
       appBar: AppBar(
         title: Text("Саха Тыла"),
       ),
-      body: _selectedIndex == 0 ? Home(
-          HomeBloc(
-              api: locator<ApiClient>(),
-              database: locator<AppDatabase>()
-          )
-      ) : FavoriteList(),
+      body: Container(
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => HomeBloc(
+                api: locator<ApiClient>(),
+                database: locator<AppDatabase>(),
+                currentItem: () { return _selectedIndex; },
+                onItemTapped: _onItemTapped
+            ))
+          ],
+          child: _selectedIndex == 0 ? Home() : FavoriteList(),
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(

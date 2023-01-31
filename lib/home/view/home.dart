@@ -9,9 +9,6 @@ import 'package:sakhatyla/home/view/suggestion_list.dart';
 import 'package:sakhatyla/home/view/translation_list.dart';
 
 class Home extends StatelessWidget {
-  final HomeBloc bloc;
-
-  Home(this.bloc);
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +16,22 @@ class Home extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => bloc,
-          ),
-          BlocProvider(
             create: (context) =>
                 RandomArticleBloc(api: locator<ApiClient>())..add(Load()),
-          ),
+          )
         ],
         child: Column(
           children: <Widget>[
-            SearchBar(),
+            BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                if (state is HomeLoading) {
+                  return SearchBar(state.query);
+                }
+                if (state is HomeSuccess) {
+                  return SearchBar(state.translation.query);
+                }
+                return SearchBar("");
+            }),
             BlocBuilder<HomeBloc, HomeState>(
               builder: (context, state) {
                 if (state is HomeEmpty) {

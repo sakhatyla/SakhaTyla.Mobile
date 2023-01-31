@@ -17,19 +17,28 @@ class FavoriteList extends StatelessWidget {
     return FutureBuilder<List<Article>>(
         future: _articles,
         builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
-          if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
                 child: Center(
-                  child: Text('Кураанах')
+                    child: CircularProgressIndicator()
+                )
+            );
+          } else if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData && snapshot.data!.isNotEmpty) {
+            var articles = snapshot.data!;
+            return ListView.builder(
+                itemCount: articles.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ArticleCard(article: articles[index]);
+                });
+          } else {
+            return Container(
+                child: Center(
+                    child: Text('Кураанах')
                 )
             );
           }
-          var articles = snapshot.data!;
-          return ListView.builder(
-              itemCount: articles.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ArticleCard(article: articles[index]);
-              });
-        });
+        }
+    );
   }
 }
