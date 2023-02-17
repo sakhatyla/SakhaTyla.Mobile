@@ -32,13 +32,10 @@ class FavoriteList extends StatelessWidget {
                   return ArticleCard(article: articles[index]);
                 });
           } else {
-            return Container(
-                child: Center(
-                    child: Text('Кураанах')
-                )
-            );
+            return Container();
           }
         }
     );
   }
 }
+

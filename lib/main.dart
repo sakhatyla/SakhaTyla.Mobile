@@ -65,12 +65,12 @@ class _MainState extends State<Main> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Сүрүн',
+            icon: Icon(Icons.search),
+            label: 'Поиск',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.star),
-            label: 'Тылларым',
+            label: 'Избранное',
           )
         ],
         currentIndex: _selectedIndex,
