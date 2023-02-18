@@ -20,7 +20,9 @@ class FavoriteList extends StatelessWidget {
               return Container();
             }
             if (state is FavoriteLoading) {
-              return CircularProgressIndicator();
+              return Center(
+                child: CircularProgressIndicator()
+              );
             }
             if (state is FavoriteSuccess) {
               return ListView.builder(
