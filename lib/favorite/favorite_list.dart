@@ -5,7 +5,7 @@ import 'package:sakhatyla/favorite/bloc/favorite_event.dart';
 import 'package:sakhatyla/favorite/bloc/favorite_state.dart';
 import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/services/database/database.dart';
-import 'package:sakhatyla/widgets/article_card.dart';
+import 'package:sakhatyla/widgets/article_card/article_card.dart';
 
 class FavoriteList extends StatelessWidget {
 
