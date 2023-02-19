@@ -2,22 +2,21 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/home/home.dart';
+import 'package:sakhatyla/main/main.dart';
 import 'package:sakhatyla/services/api/api.dart';
 import 'package:sakhatyla/services/database/database.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ApiClient api;
   final AppDatabase database;
-  final int Function() currentItem;
-  final Function(int index) onItemTapped;
+  final MainBloc mainBloc;
   final List<StreamSubscription> _subscriptions = [];
 
-  HomeBloc(
-      {required this.api,
-      required this.database,
-      required this.currentItem,
-      required this.onItemTapped})
-      : super(HomeEmpty()) {
+  HomeBloc({
+    required this.api,
+    required this.database,
+    required this.mainBloc,
+  }) : super(HomeEmpty()) {
     _subscriptions.add(database.onFavoriteArticleAdded.listen(
       (id) => add(FavoriteArticleAdded(id)),
     ));
@@ -25,12 +24,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       (id) => add(FavoriteArticleRemoved(id)),
     ));
     on<Search>((event, emit) async {
+      mainBloc.add(ChangeSelectedIndex(0));
       if (event.query.isEmpty) {
         emit(HomeEmpty());
       } else {
-        if (currentItem() != 0) {
-          onItemTapped(0);
-        }
         database.addLastQuery(event.query);
         emit(HomeLoading(event.query));
         try {

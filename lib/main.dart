@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/common/theme.dart';
-import 'package:sakhatyla/favorite/favorite.dart';
-import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/locator.dart';
-import 'package:sakhatyla/services/api/api.dart';
-import 'package:sakhatyla/services/database/database.dart';
+import 'package:sakhatyla/main/main.dart';
 
 void main() {
   setupLocator();
@@ -23,66 +19,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Main(),
       },
-    );
-  }
-}
-
-class Main extends StatefulWidget {
-  @override
-  State<Main> createState() => _MainState();
-}
-
-class _MainState extends State<Main> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Саха Тыла"),
-      ),
-      body: Container(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => HomeBloc(
-                api: locator<ApiClient>(),
-                database: locator<AppDatabase>(),
-                currentItem: () {
-                  return _selectedIndex;
-                },
-                onItemTapped: _onItemTapped,
-              ),
-            ),
-            BlocProvider(
-              create: (context) => FavoriteBloc(
-                database: locator<AppDatabase>(),
-              )..add(Load()),
-            ),
-          ],
-          child: _selectedIndex == 0 ? Home() : FavoriteList(),
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Поиск',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Избранное',
-          )
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
     );
   }
 }

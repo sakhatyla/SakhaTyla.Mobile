@@ -9,7 +9,6 @@ import 'package:sakhatyla/home/view/suggestion_list.dart';
 import 'package:sakhatyla/home/view/translation_list.dart';
 
 class Home extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,44 +19,47 @@ class Home extends StatelessWidget {
                 RandomArticleBloc(api: locator<ApiClient>())..add(Load()),
           )
         ],
-        child: Column(
-          children: <Widget>[
-            BlocBuilder<HomeBloc, HomeState>(
-              builder: (context, state) {
-                if (state is HomeLoading) {
-                  return SearchBar(state.query);
-                }
-                if (state is HomeSuccess) {
-                  return SearchBar(state.translation.query);
-                }
-                return SearchBar("");
-            }),
-            BlocBuilder<HomeBloc, HomeState>(
-              builder: (context, state) {
-                if (state is HomeEmpty) {
-                  return RandomArticle();
-                }
-                if (state is HomeSearching) {
-                  return Expanded(child: SuggestionList(state.suggestions));
-                }
-                if (state is HomeHistory) {
-                  return Expanded(child: SuggestionList(state.suggestions));
-                }
-                if (state is HomeLoading) {
-                  return CircularProgressIndicator();
-                }
-                if (state is HomeSuccess) {
-                  return Expanded(child: TranslationList(state.translation));
-                }
-                if (state is HomeError) {
-                  return Text('${state.error}');
-                }
-                return Text('');
-              },
-            ),
-          ],
+        child: BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) => Column(
+            children: <Widget>[
+              _searchBar(state),
+              _main(state),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget _searchBar(HomeState state) {
+    if (state is HomeLoading) {
+      return SearchBar(query: state.query);
+    }
+    if (state is HomeSuccess) {
+      return SearchBar(query: state.translation.query);
+    }
+    return SearchBar();
+  }
+
+  Widget _main(HomeState state) {
+    if (state is HomeEmpty) {
+      return RandomArticle();
+    }
+    if (state is HomeSearching) {
+      return Expanded(child: SuggestionList(state.suggestions));
+    }
+    if (state is HomeHistory) {
+      return Expanded(child: SuggestionList(state.suggestions));
+    }
+    if (state is HomeLoading) {
+      return CircularProgressIndicator();
+    }
+    if (state is HomeSuccess) {
+      return Expanded(child: TranslationList(state.translation));
+    }
+    if (state is HomeError) {
+      return Text('${state.error}');
+    }
+    return Text('');
   }
 }
