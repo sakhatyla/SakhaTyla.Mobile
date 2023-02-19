@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sakhatyla/services/api/api.dart';
-import 'package:sakhatyla/widgets/article_card/article_card.dart';
+import 'package:sakhatyla/widgets/article_card.dart';
 import 'package:sakhatyla/widgets/header.dart';
 
 class TranslationList extends StatelessWidget {

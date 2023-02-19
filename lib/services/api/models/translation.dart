@@ -5,7 +5,10 @@ class Translation {
   final List<ArticleGroup> articles;
   final List<Article> moreArticles;
 
-  Translation({required this.query, required this.articles, required this.moreArticles});
+  Translation(
+      {required this.query,
+      required this.articles,
+      required this.moreArticles});
 
   factory Translation.fromJson(Map<String, dynamic> json) {
     return Translation(
@@ -19,18 +22,43 @@ class Translation {
     );
   }
 
-  Translation copyWith({int? toggleArticleId}) {
+  Translation copyWith({
+    int? toggleArticleId,
+    List<int>? favoriteArticleIds,
+    List<int>? notFavoriteArticleIds,
+  }) {
     return Translation(
       query: this.query,
       articles: this
           .articles
-          .map((g) => g.copyWith(toggleArticleId: toggleArticleId))
+          .map((g) => g.copyWith(
+                toggleArticleId: toggleArticleId,
+                favoriteArticleIds: favoriteArticleIds,
+                notFavoriteArticleIds: notFavoriteArticleIds,
+              ))
           .toList(),
       moreArticles: this
           .moreArticles
-          .map((a) => a.copyWith(toggleArticleId: toggleArticleId))
+          .map((a) => a.copyWith(
+                toggleArticleId: toggleArticleId,
+                favoriteArticleIds: favoriteArticleIds,
+                notFavoriteArticleIds: notFavoriteArticleIds,
+              ))
           .toList(),
     );
+  }
+
+  List<int> getArticleIds() {
+    final ids = List<int>.empty(growable: true);
+    for (var group in articles) {
+      for (var article in group.articles) {
+        ids.add(article.id);
+      }
+    }
+    for (var article in moreArticles) {
+      ids.add(article.id);
+    }
+    return ids;
   }
 }
 
@@ -39,7 +67,10 @@ class ArticleGroup {
   final String toLanguageName;
   final List<Article> articles;
 
-  ArticleGroup({required this.fromLanguageName, required this.toLanguageName, required this.articles});
+  ArticleGroup(
+      {required this.fromLanguageName,
+      required this.toLanguageName,
+      required this.articles});
 
   factory ArticleGroup.fromJson(Map<String, dynamic> json) {
     return ArticleGroup(
@@ -50,13 +81,21 @@ class ArticleGroup {
             .toList());
   }
 
-  ArticleGroup copyWith({int? toggleArticleId}) {
+  ArticleGroup copyWith({
+    int? toggleArticleId,
+    List<int>? favoriteArticleIds,
+    List<int>? notFavoriteArticleIds,
+  }) {
     return ArticleGroup(
       fromLanguageName: this.fromLanguageName,
       toLanguageName: this.toLanguageName,
       articles: this
           .articles
-          .map((a) => a.copyWith(toggleArticleId: toggleArticleId))
+          .map((a) => a.copyWith(
+                toggleArticleId: toggleArticleId,
+                favoriteArticleIds: favoriteArticleIds,
+                notFavoriteArticleIds: notFavoriteArticleIds,
+              ))
           .toList(),
     );
   }

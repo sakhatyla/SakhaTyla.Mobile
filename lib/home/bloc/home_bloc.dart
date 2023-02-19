@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/services/api/api.dart';
@@ -8,13 +10,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final AppDatabase database;
   final int Function() currentItem;
   final Function(int index) onItemTapped;
+  final List<StreamSubscription> _subscriptions = [];
 
-  HomeBloc({
-    required this.api,
-    required this.database,
-    required this.currentItem,
-    required this.onItemTapped
-  }) : super(HomeEmpty()) {
+  HomeBloc(
+      {required this.api,
+      required this.database,
+      required this.currentItem,
+      required this.onItemTapped})
+      : super(HomeEmpty()) {
+    _subscriptions.add(database.onFavoriteArticleAdded.listen(
+      (id) => add(FavoriteArticleAdded(id)),
+    ));
+    _subscriptions.add(database.onFavoriteArticleRemoved.listen(
+      (id) => add(FavoriteArticleRemoved(id)),
+    ));
     on<Search>((event, emit) async {
       if (event.query.isEmpty) {
         emit(HomeEmpty());
@@ -25,9 +34,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         database.addLastQuery(event.query);
         emit(HomeLoading(event.query));
         try {
-          final translation = await api.getTranslation(event.query);
+          var translation = await api.getTranslation(event.query);
+          final articleIds = translation.getArticleIds();
+          final favoriteArticles =
+              await database.getFavoriteArticles(articleIds: articleIds);
+          final favoriteArticleIds = favoriteArticles.map((a) => a.id).toList();
+          translation =
+              translation.copyWith(favoriteArticleIds: favoriteArticleIds);
           emit(HomeSuccess(translation));
         } catch (error) {
+          print('Caught error: $error');
           emit(HomeError('error'));
         }
       }
@@ -38,6 +54,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           final suggestions = await api.getSuggestions(event.query);
           emit(HomeSearching(suggestions));
         } catch (error) {
+          print('Caught error: $error');
           emit(HomeError('error'));
         }
       } else {
@@ -63,5 +80,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         )));
       }
     });
+    on<FavoriteArticleAdded>((event, emit) {
+      if (state is HomeSuccess) {
+        emit(HomeSuccess((state as HomeSuccess)
+            .translation
+            .copyWith(favoriteArticleIds: [event.id])));
+      }
+    });
+    on<FavoriteArticleRemoved>((event, emit) {
+      if (state is HomeSuccess) {
+        emit(HomeSuccess((state as HomeSuccess)
+            .translation
+            .copyWith(notFavoriteArticleIds: [event.id])));
+      }
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _subscriptions.forEach((s) => s.cancel());
+    return super.close();
   }
 }

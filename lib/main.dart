@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/common/theme.dart';
-import 'package:sakhatyla/favorite/favorite_list.dart';
+import 'package:sakhatyla/favorite/favorite.dart';
 import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/locator.dart';
-import 'package:sakhatyla/home/view/home.dart';
 import 'package:sakhatyla/services/api/api.dart';
 import 'package:sakhatyla/services/database/database.dart';
 
@@ -29,7 +28,6 @@ class MyApp extends StatelessWidget {
 }
 
 class Main extends StatefulWidget {
-
   @override
   State<Main> createState() => _MainState();
 }
@@ -52,12 +50,21 @@ class _MainState extends State<Main> {
       body: Container(
         child: MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => HomeBloc(
+            BlocProvider(
+              create: (context) => HomeBloc(
                 api: locator<ApiClient>(),
                 database: locator<AppDatabase>(),
-                currentItem: () { return _selectedIndex; },
-                onItemTapped: _onItemTapped
-            ))
+                currentItem: () {
+                  return _selectedIndex;
+                },
+                onItemTapped: _onItemTapped,
+              ),
+            ),
+            BlocProvider(
+              create: (context) => FavoriteBloc(
+                database: locator<AppDatabase>(),
+              )..add(Load()),
+            ),
           ],
           child: _selectedIndex == 0 ? Home() : FavoriteList(),
         ),

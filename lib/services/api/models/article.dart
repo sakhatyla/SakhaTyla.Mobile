@@ -6,6 +6,7 @@ class Article {
   final String toLanguageName;
   final String? categoryName;
   final bool collapsed;
+  final bool isFavorite;
 
   Article({
     required this.id,
@@ -15,6 +16,7 @@ class Article {
     required this.toLanguageName,
     this.categoryName,
     required this.collapsed,
+    this.isFavorite = false,
   });
 
   factory Article.fromJson(
@@ -32,7 +34,11 @@ class Article {
     );
   }
 
-  Article copyWith({int? toggleArticleId}) {
+  Article copyWith({
+    int? toggleArticleId,
+    List<int>? favoriteArticleIds,
+    List<int>? notFavoriteArticleIds,
+  }) {
     return Article(
       id: id,
       title: title,
@@ -41,6 +47,11 @@ class Article {
       toLanguageName: toLanguageName,
       categoryName: categoryName,
       collapsed: id == toggleArticleId ? !collapsed : collapsed,
+      isFavorite: favoriteArticleIds?.contains(id) == true
+          ? true
+          : notFavoriteArticleIds?.contains(id) == true
+              ? false
+              : isFavorite,
     );
   }
 }

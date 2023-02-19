@@ -12,6 +12,7 @@ class RandomArticleBloc extends Bloc<RandomArticleEvent, RandomArticleState> {
         final article = await api.getRandomArticle();
         emit(RandomArticleSuccess(article));
       } catch (error) {
+        print('Caught error: $error');
         emit(RandomArticleError('error'));
       }
     });

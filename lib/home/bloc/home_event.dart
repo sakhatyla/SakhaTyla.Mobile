@@ -35,3 +35,21 @@ class LastQuery extends HomeEvent {
   @override
   List<Object> get props => [];
 }
+
+class FavoriteArticleAdded extends HomeEvent {
+  final int id;
+
+  const FavoriteArticleAdded(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
+class FavoriteArticleRemoved extends HomeEvent {
+  final int id;
+
+  const FavoriteArticleRemoved(this.id);
+
+  @override
+  List<Object> get props => [id];
+}

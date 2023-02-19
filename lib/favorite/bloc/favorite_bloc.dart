@@ -8,7 +8,8 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
   FavoriteBloc({
     required AppDatabase database,
-  }) : _database = database, super(FavoriteEmpty()) {
+  })  : _database = database,
+        super(FavoriteEmpty()) {
     on<Load>((event, emit) async {
       emit(FavoriteLoading());
       var articles = await _database.getFavoriteArticles();
@@ -18,5 +19,19 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
         emit(FavoriteSuccess(articles));
       }
     });
+    on<ToggleArticleFavorite>(((event, emit) async {
+      var isFavorite = await _database.isArticleFavorite(event.article.id);
+      if (isFavorite) {
+        await _database.removeFavoriteArticle(event.article.id);
+      } else {
+        await _database.addFavoriteArticle(event.article);
+      }
+      var articles = await _database.getFavoriteArticles();
+      if (articles.isEmpty) {
+        emit(FavoriteEmpty());
+      } else {
+        emit(FavoriteSuccess(articles));
+      }
+    }));
   }
 }
