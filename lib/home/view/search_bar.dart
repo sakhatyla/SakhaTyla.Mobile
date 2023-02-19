@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 class SearchBar extends StatefulWidget {
   final String? query;
 
-  SearchBar({this.query});
+  SearchBar(this.query);
 
   @override
   _SearchBarState createState() => _SearchBarState();

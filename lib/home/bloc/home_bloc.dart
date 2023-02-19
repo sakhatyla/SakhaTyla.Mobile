@@ -6,12 +6,22 @@ import 'package:sakhatyla/services/database/database.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ApiClient api;
   final AppDatabase database;
+  final int Function() currentItem;
+  final Function(int index) onItemTapped;
 
-  HomeBloc({required this.api, required this.database}) : super(HomeEmpty()) {
+  HomeBloc({
+    required this.api,
+    required this.database,
+    required this.currentItem,
+    required this.onItemTapped
+  }) : super(HomeEmpty()) {
     on<Search>((event, emit) async {
       if (event.query.isEmpty) {
         emit(HomeEmpty());
       } else {
+        if (currentItem() != 0) {
+          onItemTapped(0);
+        }
         database.addLastQuery(event.query);
         emit(HomeLoading(event.query));
         try {
