@@ -1,9 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sakhatyla/common/theme.dart';
+import 'package:sakhatyla/firebase_options.dart';
 import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/main/main.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   setupLocator();
   runApp(MyApp());
 }
