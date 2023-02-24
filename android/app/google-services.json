@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "92000584366",
+    "firebase_url": "https://sakhatyla.firebaseio.com",
+    "project_id": "sakhatyla",
+    "storage_bucket": "sakhatyla.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92000584366:android:cc32dbca25d1be24cba33f",
+        "android_client_info": {
+          "package_name": "ru.bacr.dictionary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92000584366-5ns90dms6qvdkir5h5nk4hgfkqvdhbbj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgV43PpAE86R0WDDdA7vjvlz9MKHEC0TQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92000584366-5ns90dms6qvdkir5h5nk4hgfkqvdhbbj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "92000584366-5g0ci4l6dvlnnqkck3nq7kj1uj5o2o5g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ru.sakhatyla.app",
+                "app_store_id": "1361019305"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

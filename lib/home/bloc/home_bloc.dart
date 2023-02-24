@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/main/main.dart';
@@ -30,6 +31,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       } else {
         database.addLastQuery(event.query);
         emit(HomeLoading(event.query));
+        await FirebaseAnalytics.instance.logEvent(
+          name: 'search',
+          parameters: {
+            'query': event.query,
+          },
+        );
         try {
           var translation = await api.getTranslation(event.query);
           final articleIds = translation.getArticleIds();
