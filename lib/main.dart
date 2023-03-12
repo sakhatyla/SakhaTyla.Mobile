@@ -21,6 +21,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Саха Тыла',
       theme: appTheme,
+      darkTheme: appDarkTheme,
+      themeMode: ThemeMode.system,
       initialRoute: '/',
       routes: {
         '/': (context) => Main(),
