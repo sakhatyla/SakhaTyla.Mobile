@@ -20,3 +20,5 @@ const int _blackPrimaryValue = 0xFF080808;
 final appTheme = ThemeData(
   primarySwatch: primaryBlack,
 );
+
+final appDarkTheme = ThemeData.dark();
