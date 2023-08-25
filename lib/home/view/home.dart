@@ -4,7 +4,7 @@ import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/random_article/random_article.dart';
 import 'package:sakhatyla/services/api/api.dart';
-import 'package:sakhatyla/home/view/search_bar.dart';
+import 'package:sakhatyla/home/view/search_bar.dart' as sb;
 import 'package:sakhatyla/home/view/suggestion_list.dart';
 import 'package:sakhatyla/home/view/translation_list.dart';
 
@@ -33,12 +33,12 @@ class Home extends StatelessWidget {
 
   Widget _searchBar(HomeState state) {
     if (state is HomeLoading) {
-      return SearchBar(query: state.query);
+      return sb.SearchBar(query: state.query);
     }
     if (state is HomeSuccess) {
-      return SearchBar(query: state.translation.query);
+      return sb.SearchBar(query: state.translation.query);
     }
-    return SearchBar();
+    return sb.SearchBar();
   }
 
   Widget _main(HomeState state) {
