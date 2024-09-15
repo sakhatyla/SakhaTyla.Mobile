@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/random_article/random_article.dart';
 import 'package:sakhatyla/services/api/api.dart';
+import 'package:sakhatyla/services/error/error.dart';
 
 class RandomArticleBloc extends Bloc<RandomArticleEvent, RandomArticleState> {
   final ApiClient api;
@@ -11,8 +12,8 @@ class RandomArticleBloc extends Bloc<RandomArticleEvent, RandomArticleState> {
       try {
         final article = await api.getRandomArticle();
         emit(RandomArticleSuccess(article));
-      } catch (error) {
-        print('Caught error: $error');
+      } catch (err, s) {
+        reportError(err, s);
         emit(RandomArticleError('error'));
       }
     });

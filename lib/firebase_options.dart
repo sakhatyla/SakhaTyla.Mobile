@@ -68,4 +68,5 @@ class DefaultFirebaseOptions {
     iosClientId: '92000584366-5g0ci4l6dvlnnqkck3nq7kj1uj5o2o5g.apps.googleusercontent.com',
     iosBundleId: 'ru.sakhatyla.app',
   );
+
 }

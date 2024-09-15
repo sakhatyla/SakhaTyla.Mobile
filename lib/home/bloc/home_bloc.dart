@@ -6,6 +6,7 @@ import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/main/main.dart';
 import 'package:sakhatyla/services/api/api.dart';
 import 'package:sakhatyla/services/database/database.dart';
+import 'package:sakhatyla/services/error/error.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ApiClient api;
@@ -46,8 +47,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           translation =
               translation.copyWith(favoriteArticleIds: favoriteArticleIds);
           emit(HomeSuccess(translation));
-        } catch (error) {
-          print('Caught error: $error');
+        } catch (err, s) {
+          reportError(err, s);
           emit(HomeError('error'));
         }
       }
@@ -57,8 +58,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         try {
           final suggestions = await api.getSuggestions(event.query);
           emit(HomeSearching(suggestions));
-        } catch (error) {
-          print('Caught error: $error');
+        } catch (err, s) {
+          reportError(err, s);
           emit(HomeError('error'));
         }
       } else {
