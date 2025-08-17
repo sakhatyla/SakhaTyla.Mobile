@@ -14,9 +14,9 @@ stages:
   - job: Android
     steps:
     - task: JavaToolInstaller@0
-      displayName: Use Java 11
+      displayName: Use Java 17
       inputs:
-        versionSpec: '11'
+        versionSpec: '17'
         jdkArchitectureOption: 'x64'
         jdkSourceOption: 'PreInstalled'
         
