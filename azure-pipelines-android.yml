@@ -1,9 +1,7 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger: none
+trigger:
+  tags:
+    include:
+    - '*'
 
 pr: none
 
@@ -28,7 +26,7 @@ stages:
         mode: 'auto'
         channel: 'stable'
         version: 'custom'
-        customVersion: '3.22.0'
+        customVersion: '3.32.4'
 
     - task: DownloadSecureFile@1
       displayName: Download dictionarykeystore
