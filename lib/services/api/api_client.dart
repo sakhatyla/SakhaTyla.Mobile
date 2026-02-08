@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sakhatyla/services/api/api.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiClient {
-  static const endpoint = 'https://sakhatyla.ru';
+  static final endpoint = dotenv.env['API_ENDPOINT'];
 
   Future<Article> getRandomArticle() async {
     final response = await http.get(Uri.parse('$endpoint/api/articles/random'));
