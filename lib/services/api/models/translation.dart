@@ -12,11 +12,11 @@ class Translation {
 
   factory Translation.fromJson(Map<String, dynamic> json) {
     return Translation(
-      query: json['Query'],
-      articles: (json['Articles'] as List<dynamic>)
+      query: json['query'] ?? '',
+      articles: (json['articles'] as List<dynamic>? ?? [])
           .map((dynamic a) => ArticleGroup.fromJson(a))
           .toList(),
-      moreArticles: (json['MoreArticles'] as List<dynamic>)
+      moreArticles: (json['moreArticles'] as List<dynamic>? ?? [])
           .map((dynamic a) => Article.fromJson(a, collapsed: true))
           .toList(),
     );
@@ -74,9 +74,9 @@ class ArticleGroup {
 
   factory ArticleGroup.fromJson(Map<String, dynamic> json) {
     return ArticleGroup(
-        fromLanguageName: json['FromLanguageName'],
-        toLanguageName: json['ToLanguageName'],
-        articles: (json['Articles'] as List<dynamic>)
+        fromLanguageName: json['fromLanguage']?['name'] ?? '',
+        toLanguageName: json['toLanguage']?['name'] ?? '',
+        articles: (json['articles'] as List<dynamic>? ?? [])
             .map((dynamic a) => Article.fromJson(a))
             .toList());
   }

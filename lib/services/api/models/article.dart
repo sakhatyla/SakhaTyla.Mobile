@@ -24,12 +24,12 @@ class Article {
     bool collapsed = false,
   }) {
     return Article(
-      id: json['Id'],
-      title: json['Title'],
-      text: json['Text'],
-      fromLanguageName: json['FromLanguageName'],
-      toLanguageName: json['ToLanguageName'],
-      categoryName: json['CategoryName'],
+      id: json['id'],
+      title: json['title'] ?? '',
+      text: json['text'] ?? '',
+      fromLanguageName: json['fromLanguage']?['name'] ?? '',
+      toLanguageName: json['toLanguage']?['name'] ?? '',
+      categoryName: json['category']?['name'],
       collapsed: collapsed,
     );
   }

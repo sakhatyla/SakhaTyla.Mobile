@@ -7,7 +7,11 @@ class ApiClient {
   static final endpoint = dotenv.env['API_ENDPOINT'];
 
   Future<Article> getRandomArticle() async {
-    final response = await http.get(Uri.parse('$endpoint/api/articles/random'));
+    final response = await http.post(
+      Uri.parse('$endpoint/api/public/GetRandomArticle'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({}),
+    );
 
     if (response.statusCode == 200) {
       return Article.fromJson(json.decode(response.body));
@@ -17,9 +21,11 @@ class ApiClient {
   }
 
   Future<Translation> getTranslation(String query) async {
-    var url = Uri.parse('$endpoint/api/articles/translate');
-    url = url.replace(queryParameters: {'query': query});
-    final response = await http.get(url);
+    final response = await http.post(
+      Uri.parse('$endpoint/api/public/Translate'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'query': query}),
+    );
 
     if (response.statusCode == 200) {
       return Translation.fromJson(json.decode(response.body));
@@ -29,9 +35,11 @@ class ApiClient {
   }
 
   Future<List<Suggestion>> getSuggestions(String query) async {
-    var url = Uri.parse('$endpoint/api/articles/suggest');
-    url = url.replace(queryParameters: {'query': query});
-    final response = await http.get(url);
+    final response = await http.post(
+      Uri.parse('$endpoint/api/public/SuggestArticles'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'query': query}),
+    );
 
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List<dynamic>)
