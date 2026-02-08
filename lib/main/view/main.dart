@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sakhatyla/app_drawer.dart';
 import 'package:sakhatyla/favorite/favorite.dart';
 import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/locator.dart';
@@ -34,6 +35,9 @@ class Main extends StatelessWidget {
             return Scaffold(
               appBar: AppBar(
                 title: Text("Саха Тыла"),
+              ),
+              drawer: AppDrawer(
+                title: "Саха Тыла",
               ),
               body: Container(
                 child: state.selectedIndex == 0 ? Home() : FavoriteList(),

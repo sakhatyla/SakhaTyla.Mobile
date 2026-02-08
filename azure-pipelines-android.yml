@@ -26,7 +26,7 @@ stages:
         mode: 'auto'
         channel: 'stable'
         version: 'custom'
-        customVersion: '3.32.4'
+        customVersion: '3.35.7'
 
     - task: DownloadSecureFile@1
       displayName: Download dictionarykeystore

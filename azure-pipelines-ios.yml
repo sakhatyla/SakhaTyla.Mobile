@@ -23,7 +23,7 @@ stages:
         mode: 'auto'
         channel: 'stable'
         version: 'custom'
-        customVersion: '3.32.4'
+        customVersion: '3.35.7'
     
     - task: InstallAppleCertificate@2
       inputs:
