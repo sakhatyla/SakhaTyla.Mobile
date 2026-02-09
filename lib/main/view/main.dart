@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/app_drawer.dart';
+import 'package:sakhatyla/books/books.dart';
 import 'package:sakhatyla/favorite/favorite.dart';
 import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/locator.dart';
@@ -25,6 +26,11 @@ class Main extends StatelessWidget {
             ),
           ),
           BlocProvider(
+            create: (context) => BooksBloc(
+              api: locator<ApiClient>(),
+            )..add(LoadBooks()),
+          ),
+          BlocProvider(
             create: (context) => FavoriteBloc(
               database: locator<AppDatabase>(),
             )..add(Load()),
@@ -40,13 +46,21 @@ class Main extends StatelessWidget {
                 title: "Саха Тыла",
               ),
               body: Container(
-                child: state.selectedIndex == 0 ? Home() : FavoriteList(),
+                child: state.selectedIndex == 0
+                    ? Home()
+                    : state.selectedIndex == 1
+                        ? BooksList()
+                        : FavoriteList(),
               ),
               bottomNavigationBar: BottomNavigationBar(
                 items: [
                   BottomNavigationBarItem(
                     icon: Icon(Icons.search),
                     label: 'Поиск',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.menu_book),
+                    label: 'Книги',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.star),

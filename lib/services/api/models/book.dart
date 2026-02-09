@@ -34,25 +34,56 @@ class Book {
   }
 }
 
+class BookAuthor {
+  final int id;
+  final String? lastName;
+  final String? firstName;
+  final String? middleName;
+
+  BookAuthor({
+    required this.id,
+    this.lastName,
+    this.firstName,
+    this.middleName,
+  });
+
+  factory BookAuthor.fromJson(Map<String, dynamic> json) {
+    return BookAuthor(
+      id: json['id'],
+      lastName: json['lastName'],
+      firstName: json['firstName'],
+      middleName: json['middleName'],
+    );
+  }
+
+  String get displayName {
+    final parts = <String>[];
+    if (lastName != null && lastName!.isNotEmpty) parts.add(lastName!);
+    if (firstName != null && firstName!.isNotEmpty) parts.add(firstName!);
+    if (middleName != null && middleName!.isNotEmpty) parts.add(middleName!);
+    return parts.isNotEmpty ? parts.join(' ') : '';
+  }
+}
+
 class BookAuthorship {
   final int id;
-  final int bookId;
-  final int bookAuthorId;
-  final String? bookAuthorName;
+  final int authorId;
+  final BookAuthor? author;
+  final int weight;
 
   BookAuthorship({
     required this.id,
-    required this.bookId,
-    required this.bookAuthorId,
-    this.bookAuthorName,
+    required this.authorId,
+    this.author,
+    required this.weight,
   });
 
   factory BookAuthorship.fromJson(Map<String, dynamic> json) {
     return BookAuthorship(
-      id: json['id'] ?? 0,
-      bookId: json['bookId'] ?? 0,
-      bookAuthorId: json['bookAuthorId'] ?? 0,
-      bookAuthorName: json['bookAuthor']?['name'],
+      id: json['id'],
+      authorId: json['authorId'],
+      author: json['author'] != null ? BookAuthor.fromJson(json['author']) : null,
+      weight: json['weight'] ?? 0,
     );
   }
 }
