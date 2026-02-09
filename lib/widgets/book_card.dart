@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sakhatyla/book_view/book_view.dart';
 import 'package:sakhatyla/services/api/api.dart';
 
 class BookCard extends StatelessWidget {
@@ -12,7 +13,12 @@ class BookCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: InkWell(
         onTap: () {
-          // TODO: Navigate to book detail page
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BookViewPage(bookId: book.id),
+            ),
+          );
         },
         child: Padding(
           padding: EdgeInsets.all(12),
