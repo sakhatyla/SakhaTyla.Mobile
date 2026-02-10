@@ -17,6 +17,7 @@ class BookViewPage extends StatefulWidget {
 
 class _BookViewPageState extends State<BookViewPage> {
   late PageController _pageController;
+  double? _sliderValue;
 
   @override
   void initState() {
@@ -45,6 +46,9 @@ class _BookViewPageState extends State<BookViewPage> {
             if (_pageController.hasClients &&
                 _pageController.page?.round() != pageIndex) {
               _pageController.jumpToPage(pageIndex);
+              setState(() {
+                _sliderValue = null;
+              });
             }
           }
         },
@@ -82,7 +86,7 @@ class _BookViewPageState extends State<BookViewPage> {
 
   void _showLabelsMenu(BuildContext context, BookViewBookLoaded state) {
     final bloc = context.read<BookViewBloc>();
-    
+
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -165,6 +169,7 @@ class _BookViewPageState extends State<BookViewPage> {
       final firstPage = book.firstPage ?? 1;
       final lastPage = book.lastPage ?? firstPage;
       final totalPages = lastPage - firstPage + 1;
+      final bloc = context.read<BookViewBloc>();
 
       return Column(
         children: [
@@ -174,7 +179,7 @@ class _BookViewPageState extends State<BookViewPage> {
               itemCount: totalPages,
               onPageChanged: (index) {
                 final pageNumber = firstPage + index;
-                context.read<BookViewBloc>().add(LoadPage(pageNumber));
+                bloc.add(LoadPage(pageNumber));
               },
               itemBuilder: (context, index) {
                 final pageNumber = firstPage + index;
@@ -190,7 +195,8 @@ class _BookViewPageState extends State<BookViewPage> {
               },
             ),
           ),
-          _buildPageIndicator(firstPage, lastPage, state.currentPageNumber),
+          _buildPageIndicator(
+              bloc, firstPage, lastPage, state.currentPageNumber),
         ],
       );
     }
@@ -239,23 +245,57 @@ class _BookViewPageState extends State<BookViewPage> {
     );
   }
 
-  Widget _buildPageIndicator(int firstPage, int lastPage, int currentPage) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      decoration: BoxDecoration(
-        color: Colors.black.withAlpha((0.7 * 255).toInt()),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Страница $currentPage из $lastPage',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
+  Widget _buildPageIndicator(
+      BookViewBloc bloc, int firstPage, int lastPage, int currentPage) {
+    return SafeArea(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.black.withAlpha((0.7 * 255).toInt()),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Страница ${_sliderValue?.round() ?? currentPage} из $lastPage',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                activeTrackColor: Colors.blue,
+                inactiveTrackColor: Colors.grey,
+                thumbColor: Colors.blue,
+                overlayColor: Colors.blue.withAlpha((0.2 * 255).toInt()),
+                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8),
+                overlayShape: RoundSliderOverlayShape(overlayRadius: 16),
+              ),
+              child: Slider(
+                value: _sliderValue ?? currentPage.toDouble(),
+                min: firstPage.toDouble(),
+                max: lastPage.toDouble(),
+                divisions: lastPage - firstPage,
+                label: (_sliderValue?.round() ?? currentPage).toString(),
+                onChanged: (value) {
+                  setState(() {
+                    _sliderValue = value;
+                  });
+                },
+                onChangeEnd: (value) {
+                  final pageNumber = value.round();
+                  bloc.add(NavigateToLabel(pageNumber));
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
