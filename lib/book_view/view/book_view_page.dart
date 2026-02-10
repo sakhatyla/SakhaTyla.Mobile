@@ -37,86 +37,165 @@ class _BookViewPageState extends State<BookViewPage> {
         api: locator<ApiClient>(),
         bookId: widget.bookId,
       )..add(LoadBook()),
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppBar(
-          title: BlocBuilder<BookViewBloc, BookViewState>(
-            builder: (context, state) {
-              if (state is BookViewBookLoaded) {
-                return Text(state.book.name ?? 'Книга');
-              }
-              return Text('Книга');
-            },
-          ),
-          backgroundColor: Colors.black.withAlpha((0.7 * 255).toInt()),
-        ),
-        body: BlocBuilder<BookViewBloc, BookViewState>(
-          builder: (context, state) {
-            if (state is BookViewInitial || state is BookViewLoadingBook) {
-              return Center(
-                child: CircularProgressIndicator(color: Colors.white),
-              );
+      child: BlocConsumer<BookViewBloc, BookViewState>(
+        listener: (context, state) {
+          if (state is BookViewBookLoaded) {
+            final firstPage = state.book.firstPage ?? 1;
+            final pageIndex = state.currentPageNumber - firstPage;
+            if (_pageController.hasClients &&
+                _pageController.page?.round() != pageIndex) {
+              _pageController.jumpToPage(pageIndex);
             }
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: _buildTitle(state),
+              actions: [
+                if (state is BookViewBookLoaded &&
+                    state.labels != null &&
+                    state.labels!.isNotEmpty)
+                  _buildLabelsButton(context, state),
+              ],
+            ),
+            body: _buildBody(context, state),
+          );
+        },
+      ),
+    );
+  }
 
-            if (state is BookViewError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error, color: Colors.red, size: 48),
-                    SizedBox(height: 16),
-                    Text(
-                      'Ошибка: ${state.error}',
-                      style: TextStyle(color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+  Widget _buildTitle(BookViewState state) {
+    if (state is BookViewBookLoaded) {
+      return Text(state.book.name ?? 'Книга');
+    }
+    return Text('Книга');
+  }
+
+  Widget _buildLabelsButton(BuildContext context, BookViewBookLoaded state) {
+    return IconButton(
+      icon: Icon(Icons.bookmark),
+      onPressed: () => _showLabelsMenu(context, state),
+    );
+  }
+
+  void _showLabelsMenu(BuildContext context, BookViewBookLoaded state) {
+    final bloc = context.read<BookViewBloc>();
+    
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (modalContext) => Container(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                'Закладки',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
-              );
-            }
+              ),
+            ),
+            Divider(color: Colors.grey[700]),
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: state.labels!.length,
+                itemBuilder: (context, index) {
+                  final label = state.labels![index];
+                  final pageNumber = label.page?.number ?? 0;
 
-            if (state is BookViewBookLoaded) {
-              final book = state.book;
-              final firstPage = book.firstPage ?? 1;
-              final lastPage = book.lastPage ?? firstPage;
-              final totalPages = lastPage - firstPage + 1;
-
-              return Column(
-                children: [
-                  Expanded(
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: totalPages,
-                      onPageChanged: (index) {
-                        final pageNumber = firstPage + index;
-                        context.read<BookViewBloc>().add(LoadPage(pageNumber));
-                      },
-                      itemBuilder: (context, index) {
-                        final pageNumber = firstPage + index;
-                        final bookPage = state.loadedPages[pageNumber];
-
-                        if (bookPage == null) {
-                          return Center(
-                            child:
-                                CircularProgressIndicator(color: Colors.white),
-                          );
-                        }
-
-                        return _buildPageImage(bookPage);
-                      },
+                  return ListTile(
+                    leading: Icon(Icons.bookmark_border),
+                    title: Text(
+                      label.name ?? 'Закладка ${index + 1}',
                     ),
-                  ),
-                  _buildPageIndicator(
-                      firstPage, lastPage, state.currentPageNumber),
-                ],
-              );
-            }
-
-            return Container();
-          },
+                    subtitle: Text(
+                      'Страница $pageNumber',
+                    ),
+                    onTap: () {
+                      Navigator.pop(modalContext);
+                      if (pageNumber > 0) {
+                        bloc.add(NavigateToLabel(pageNumber));
+                      }
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  Widget _buildBody(BuildContext context, BookViewState state) {
+    if (state is BookViewInitial || state is BookViewLoadingBook) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (state is BookViewError) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error, color: Colors.red, size: 48),
+            SizedBox(height: 16),
+            Text(
+              'Ошибка: ${state.error}',
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (state is BookViewBookLoaded) {
+      final book = state.book;
+      final firstPage = book.firstPage ?? 1;
+      final lastPage = book.lastPage ?? firstPage;
+      final totalPages = lastPage - firstPage + 1;
+
+      return Column(
+        children: [
+          Expanded(
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: totalPages,
+              onPageChanged: (index) {
+                final pageNumber = firstPage + index;
+                context.read<BookViewBloc>().add(LoadPage(pageNumber));
+              },
+              itemBuilder: (context, index) {
+                final pageNumber = firstPage + index;
+                final bookPage = state.loadedPages[pageNumber];
+
+                if (bookPage == null) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                return _buildPageImage(bookPage);
+              },
+            ),
+          ),
+          _buildPageIndicator(firstPage, lastPage, state.currentPageNumber),
+        ],
+      );
+    }
+
+    return Container();
   }
 
   Widget _buildPageImage(BookPage page) {
@@ -133,7 +212,6 @@ class _BookViewPageState extends State<BookViewPage> {
             if (loadingProgress == null) return child;
             return Center(
               child: CircularProgressIndicator(
-                color: Colors.white,
                 value: loadingProgress.expectedTotalBytes != null
                     ? loadingProgress.cumulativeBytesLoaded /
                         loadingProgress.expectedTotalBytes!

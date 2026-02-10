@@ -9,6 +9,11 @@ class LoadBook extends BookViewEvent {
   List<Object> get props => [];
 }
 
+class LoadLabels extends BookViewEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class LoadPage extends BookViewEvent {
   final int pageNumber;
 
@@ -22,6 +27,15 @@ class PreloadPage extends BookViewEvent {
   final int pageNumber;
 
   const PreloadPage(this.pageNumber);
+
+  @override
+  List<Object> get props => [pageNumber];
+}
+
+class NavigateToLabel extends BookViewEvent {
+  final int pageNumber;
+
+  const NavigateToLabel(this.pageNumber);
 
   @override
   List<Object> get props => [pageNumber];

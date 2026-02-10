@@ -48,16 +48,6 @@ class BookCard extends StatelessWidget {
                         ),
                       ),
                     ],
-                    if (book.firstPage != null && book.lastPage != null) ...[
-                      SizedBox(height: 4),
-                      Text(
-                        'Страницы: ${book.firstPage} - ${book.lastPage}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
                   ],
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sakhatyla/books/bloc/books_event.dart';
 import 'package:sakhatyla/books/bloc/books_state.dart';
 import 'package:sakhatyla/services/api/api.dart';
+import 'package:sakhatyla/services/error/error.dart';
 
 class BooksBloc extends Bloc<BooksEvent, BooksState> {
   final ApiClient _api;
@@ -19,8 +20,9 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
         } else {
           emit(BooksSuccess(booksPage.items));
         }
-      } catch (e) {
-        emit(BooksError(e.toString()));
+      } catch (err, s) {
+        reportError(err, s);
+        emit(BooksError(err.toString()));
       }
     });
   }
