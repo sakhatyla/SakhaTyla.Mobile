@@ -1,4 +1,85 @@
 PODS:
+  - AppMetricaAdSupport (5.14.0):
+    - AppMetricaCore (= 5.14.0)
+    - AppMetricaCoreExtension (= 5.14.0)
+  - AppMetricaCore (5.14.0):
+    - AppMetricaCoreUtils (= 5.14.0)
+    - AppMetricaEncodingUtils (= 5.14.0)
+    - AppMetricaFMDB (= 5.14.0)
+    - AppMetricaHostState (= 5.14.0)
+    - AppMetricaIdentifiers (= 5.14.0)
+    - AppMetricaKeychain (= 5.14.0)
+    - AppMetricaLog (= 5.14.0)
+    - AppMetricaNetwork (= 5.14.0)
+    - AppMetricaPlatform (= 5.14.0)
+    - AppMetricaProtobuf (= 5.14.0)
+    - AppMetricaProtobufUtils (= 5.14.0)
+    - AppMetricaStorageUtils (= 5.14.0)
+  - AppMetricaCoreExtension (5.14.0):
+    - AppMetricaCore (= 5.14.0)
+    - AppMetricaStorageUtils (= 5.14.0)
+  - AppMetricaCoreUtils (5.14.0):
+    - AppMetricaLog (= 5.14.0)
+  - AppMetricaEncodingUtils (5.14.0):
+    - AppMetricaCoreUtils (= 5.14.0)
+    - AppMetricaLog (= 5.14.0)
+    - AppMetricaPlatform (= 5.14.0)
+  - AppMetricaFMDB (5.14.0)
+  - AppMetricaHostState (5.14.0):
+    - AppMetricaCoreUtils (= 5.14.0)
+    - AppMetricaLog (= 5.14.0)
+  - AppMetricaIdentifiers (5.14.0):
+    - AppMetricaKeychain (= 5.14.0)
+    - AppMetricaLogSwift (= 5.14.0)
+    - AppMetricaPlatform (= 5.14.0)
+    - AppMetricaStorageUtils (= 5.14.0)
+    - AppMetricaSynchronization (= 5.14.0)
+  - AppMetricaIDSync (5.14.0):
+    - AppMetricaCore (= 5.14.0)
+    - AppMetricaCoreExtension (= 5.14.0)
+    - AppMetricaCoreUtils (= 5.14.0)
+    - AppMetricaLog (= 5.14.0)
+    - AppMetricaNetwork (= 5.14.0)
+    - AppMetricaPlatform (= 5.14.0)
+    - AppMetricaStorageUtils (= 5.14.0)
+  - AppMetricaKeychain (5.14.0):
+    - AppMetricaCoreUtils (= 5.14.0)
+    - AppMetricaLog (= 5.14.0)
+    - AppMetricaStorageUtils (= 5.14.0)
+  - AppMetricaLibraryAdapter (5.14.0):
+    - AppMetricaCore (= 5.14.0)
+    - AppMetricaCoreExtension (= 5.14.0)
+  - AppMetricaLog (5.14.0)
+  - AppMetricaLogSwift (5.14.0):
+    - AppMetricaLog (= 5.14.0)
+  - AppMetricaNetwork (5.14.0):
+    - AppMetricaCoreUtils (= 5.14.0)
+    - AppMetricaLog (= 5.14.0)
+    - AppMetricaPlatform (= 5.14.0)
+  - AppMetricaPlatform (5.14.0):
+    - AppMetricaCoreUtils (= 5.14.0)
+    - AppMetricaLog (= 5.14.0)
+  - AppMetricaProtobuf (5.14.0)
+  - AppMetricaProtobufUtils (5.14.0):
+    - AppMetricaProtobuf (= 5.14.0)
+  - AppMetricaStorageUtils (5.14.0):
+    - AppMetricaCoreUtils (= 5.14.0)
+    - AppMetricaLog (= 5.14.0)
+  - AppMetricaSynchronization (5.14.0):
+    - AppMetricaLogSwift (= 5.14.0)
+  - DivKit (32.35.0):
+    - DivKit_LayoutKit (= 32.35.0)
+    - DivKit_Serialization (= 32.35.0)
+    - VGSL (~> 7.12)
+  - DivKit_LayoutKit (32.35.0):
+    - DivKit_LayoutKitInterface (= 32.35.0)
+    - VGSL (~> 7.12)
+  - DivKit_LayoutKitInterface (32.35.0):
+    - VGSL (~> 7.12)
+  - DivKit_Serialization (32.35.0):
+    - VGSL (~> 7.12)
+  - DivKitBinaryCompatibilityFacade (5.2.1):
+    - DivKit (~> 32.14)
   - Firebase/Analytics (10.25.0):
     - Firebase/Core
   - Firebase/Core (10.25.0):
@@ -143,6 +224,25 @@ PODS:
     - FlutterMacOS
   - url_launcher_ios (0.0.1):
     - Flutter
+  - VGSL (7.17.0):
+    - VGSLFundamentals (= 7.17.0)
+    - VGSLNetworking (= 7.17.0)
+    - VGSLUI (= 7.17.0)
+  - VGSLFundamentals (7.17.0)
+  - VGSLNetworking (7.17.0):
+    - VGSLFundamentals (= 7.17.0)
+    - VGSLUI (= 7.17.0)
+  - VGSLUI (7.17.0):
+    - VGSLFundamentals (= 7.17.0)
+  - yandex_mobileads (7.18.0):
+    - Flutter
+    - YandexMobileAds (~> 7.18.0)
+  - YandexMobileAds (7.18.3):
+    - AppMetricaAdSupport (~> 5.14.0)
+    - AppMetricaCore (~> 5.14.0)
+    - AppMetricaIDSync (~> 5.14.0)
+    - AppMetricaLibraryAdapter (~> 5.14.0)
+    - DivKitBinaryCompatibilityFacade (~> 5.2.1)
 
 DEPENDENCIES:
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -154,9 +254,34 @@ DEPENDENCIES:
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - yandex_mobileads (from `.symlinks/plugins/yandex_mobileads/ios`)
 
 SPEC REPOS:
   trunk:
+    - AppMetricaAdSupport
+    - AppMetricaCore
+    - AppMetricaCoreExtension
+    - AppMetricaCoreUtils
+    - AppMetricaEncodingUtils
+    - AppMetricaFMDB
+    - AppMetricaHostState
+    - AppMetricaIdentifiers
+    - AppMetricaIDSync
+    - AppMetricaKeychain
+    - AppMetricaLibraryAdapter
+    - AppMetricaLog
+    - AppMetricaLogSwift
+    - AppMetricaNetwork
+    - AppMetricaPlatform
+    - AppMetricaProtobuf
+    - AppMetricaProtobufUtils
+    - AppMetricaStorageUtils
+    - AppMetricaSynchronization
+    - DivKit
+    - DivKit_LayoutKit
+    - DivKit_LayoutKitInterface
+    - DivKit_Serialization
+    - DivKitBinaryCompatibilityFacade
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
@@ -172,6 +297,11 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - PromisesSwift
+    - VGSL
+    - VGSLFundamentals
+    - VGSLNetworking
+    - VGSLUI
+    - YandexMobileAds
 
 EXTERNAL SOURCES:
   firebase_analytics:
@@ -192,8 +322,34 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
+  yandex_mobileads:
+    :path: ".symlinks/plugins/yandex_mobileads/ios"
 
 SPEC CHECKSUMS:
+  AppMetricaAdSupport: 702bdcf46b81a7fed457de56f6b0554d0480b5a3
+  AppMetricaCore: d1c73033e83316264d5797d003f0c8f7957b7f31
+  AppMetricaCoreExtension: 02a8409b471de413ac5ccf9249b12223816737c1
+  AppMetricaCoreUtils: 8d6d710d016d15cf30caa46ed7b38219842b6e51
+  AppMetricaEncodingUtils: 37803d738b7751b80e8cd3911cf42d43af6e011b
+  AppMetricaFMDB: 109e4a5ff89ca8c5609c2f2b597831aac7712e65
+  AppMetricaHostState: 8a9a1d723974201acdf819bf3a5fadb3af3f2e82
+  AppMetricaIdentifiers: 57e3164c945075fce4831567ae3a65959efaff44
+  AppMetricaIDSync: f2dcb1b268dda44cd3f1edff5dad74abbb5cb9d4
+  AppMetricaKeychain: 99950a926fb90e54913d6737a9901c45af34d800
+  AppMetricaLibraryAdapter: 643eeb8958caad92a37658751c10a591b3f74e28
+  AppMetricaLog: d2bee5f12ec196308f4a13c46b4a65013900d2db
+  AppMetricaLogSwift: 0cff437339756bd78f0a4d1526e34c51486edf3f
+  AppMetricaNetwork: 82d32db120ac3fccf7c42006354b4e203debf555
+  AppMetricaPlatform: b7bbbe687890caac28cae837fc548e66e3542cfb
+  AppMetricaProtobuf: 7b8e4a072bf634b9354f5d13cf6cc0a14b519b85
+  AppMetricaProtobufUtils: 3696c3b28c3a6a5fd95b8e44953c662ad5648f7b
+  AppMetricaStorageUtils: bb31d877359a6d1ad8ae5a6d89951edddf01af75
+  AppMetricaSynchronization: 76f438564c57b4688d640b7befc5600e21bff875
+  DivKit: 3dbffa1f9b303ba9f95ea4fc2b48375440768da2
+  DivKit_LayoutKit: c5025c06af360dc2b1a539b17567bfb628bd3755
+  DivKit_LayoutKitInterface: f31972d07134bdd373823ed31c0097eff5b9837f
+  DivKit_Serialization: c15fa9eb3878dda9710a30a19a395e61a9d2e118
+  DivKitBinaryCompatibilityFacade: 38b84cea43f82129388706b4c25f71519d42a18d
   Firebase: 0312a2352584f782ea56f66d91606891d4607f06
   firebase_analytics: e7280be84e7ff1c1e5859bd8e48de410b07e0b73
   firebase_core: 3b49a055ff54114cae400581c13671fe53936c36
@@ -206,7 +362,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 913cf60d0400ebd5d6b63a28b290372ab44590dd
   FirebaseRemoteConfigInterop: 6efda51fb5e2f15b16585197e26eaa09574e8a4d
   FirebaseSessions: dbd14adac65ce996228652c1fc3a3f576bdf3ecc
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   GoogleAppMeasurement: 9abf64b682732fed36da827aa2a68f0221fd2356
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
@@ -215,10 +371,16 @@ SPEC CHECKSUMS:
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
-  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  VGSL: 6696dd84229c7d3ce8ad9b940e89bbd199e2b12d
+  VGSLFundamentals: 5bd45cb6e0b594902aa9f8927402b4d787460bc7
+  VGSLNetworking: 4301c663201314d27357078ec8df9dccc631ec62
+  VGSLUI: 6cf73663cc3e9fcc808c095f065eb84555a5cd52
+  yandex_mobileads: 46a4640d682a8ac44b36ce03b79259f384418b19
+  YandexMobileAds: c3eed41828233daf812102d24d5aeb4bde35571a
 
-PODFILE CHECKSUM: bc63904c793cebd762fa93ba3c46c4c7665cebac
+PODFILE CHECKSUM: a5939c466e5882ec7c8d52fe0c6fcd4386bbae55
 
 COCOAPODS: 1.16.2
