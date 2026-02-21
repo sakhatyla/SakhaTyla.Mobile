@@ -191,7 +191,7 @@ class _BookViewPageState extends State<BookViewPage> {
                   );
                 }
 
-                return _buildPageImage(bookPage);
+                return _BookPageImageView(page: bookPage);
               },
             ),
           ),
@@ -202,47 +202,6 @@ class _BookViewPageState extends State<BookViewPage> {
     }
 
     return Container();
-  }
-
-  Widget _buildPageImage(BookPage page) {
-    final imageUrl = page.fileName!;
-
-    return InteractiveViewer(
-      minScale: 0.5,
-      maxScale: 4.0,
-      child: Center(
-        child: Image.network(
-          imageUrl,
-          fit: BoxFit.contain,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes!
-                    : null,
-              ),
-            );
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.error, color: Colors.red, size: 48),
-                  SizedBox(height: 16),
-                  Text(
-                    'Не удалось загрузить страницу',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    );
   }
 
   Widget _buildPageIndicator(
@@ -295,6 +254,96 @@ class _BookViewPageState extends State<BookViewPage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BookPageImageView extends StatefulWidget {
+  final BookPage page;
+
+  const _BookPageImageView({required this.page});
+
+  @override
+  _BookPageImageViewState createState() => _BookPageImageViewState();
+}
+
+class _BookPageImageViewState extends State<_BookPageImageView> {
+  late TransformationController _transformationController;
+  Offset _doubleTapPosition = Offset.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    _transformationController = TransformationController();
+  }
+
+  @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
+
+  void _handleDoubleTap() {
+    const zoomedScale = 2.5;
+    final isZoomedIn =
+        _transformationController.value.getMaxScaleOnAxis() > 1.0;
+    if (isZoomedIn) {
+      _transformationController.value = Matrix4.identity();
+    } else {
+      final dx = -_doubleTapPosition.dx * (zoomedScale - 1);
+      final dy = -_doubleTapPosition.dy * (zoomedScale - 1);
+      _transformationController.value = Matrix4.identity()
+        ..translateByDouble(dx, dy, 0, 1)
+        ..scaleByDouble(zoomedScale, zoomedScale, 1, 1);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = widget.page.fileName!;
+
+    return GestureDetector(
+      onDoubleTapDown: (details) {
+        _doubleTapPosition = details.localPosition;
+      },
+      onDoubleTap: _handleDoubleTap,
+      child: InteractiveViewer(
+        transformationController: _transformationController,
+        minScale: 0.5,
+        maxScale: 4.0,
+        child: Center(
+          child: Image.network(
+            imageUrl,
+            fit: BoxFit.contain,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              );
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error, color: Colors.red, size: 48),
+                    SizedBox(height: 16),
+                    Text(
+                      'Не удалось загрузить страницу',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
