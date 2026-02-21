@@ -17,6 +17,7 @@ class BookViewPage extends StatefulWidget {
 
 class _BookViewPageState extends State<BookViewPage> {
   late PageController _pageController;
+  bool _isPageZoomed = false;
   double? _sliderValue;
 
   @override
@@ -175,11 +176,15 @@ class _BookViewPageState extends State<BookViewPage> {
         children: [
           Expanded(
             child: PageView.builder(
+              physics: _isPageZoomed
+                  ? const NeverScrollableScrollPhysics()
+                  : const PageScrollPhysics(),
               controller: _pageController,
               itemCount: totalPages,
               onPageChanged: (index) {
                 final pageNumber = firstPage + index;
                 bloc.add(LoadPage(pageNumber));
+                if (_isPageZoomed) setState(() => _isPageZoomed = false);
               },
               itemBuilder: (context, index) {
                 final pageNumber = firstPage + index;
@@ -191,7 +196,24 @@ class _BookViewPageState extends State<BookViewPage> {
                   );
                 }
 
-                return _BookPageImageView(page: bookPage);
+                return _BookPageImageView(
+                  page: bookPage,
+                  onZoomChanged: (isZoomed) =>
+                      setState(() => _isPageZoomed = isZoomed),
+                  onPageSwipe: (direction) {
+                    if (direction > 0) {
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    } else {
+                      _pageController.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  },
+                );
               },
             ),
           ),
@@ -262,8 +284,14 @@ class _BookViewPageState extends State<BookViewPage> {
 
 class _BookPageImageView extends StatefulWidget {
   final BookPage page;
+  final ValueChanged<bool>? onZoomChanged;
+  final ValueChanged<int>? onPageSwipe; // +1 = next, -1 = previous
 
-  const _BookPageImageView({required this.page});
+  const _BookPageImageView({
+    required this.page,
+    this.onZoomChanged,
+    this.onPageSwipe,
+  });
 
   @override
   _BookPageImageViewState createState() => _BookPageImageViewState();
@@ -272,17 +300,65 @@ class _BookPageImageView extends StatefulWidget {
 class _BookPageImageViewState extends State<_BookPageImageView> {
   late TransformationController _transformationController;
   Offset _doubleTapPosition = Offset.zero;
+  bool _zoomed = false;
+  double _edgeSwipeDx = 0.0;
+  double _viewportWidth = 0.0;
+
+  static const _edgeThreshold = 60.0;
+  static const _edgeEpsilon = 2.0;
 
   @override
   void initState() {
     super.initState();
     _transformationController = TransformationController();
+    _transformationController.addListener(_onTransformChanged);
+  }
+
+  void _onTransformChanged() {
+    final isZoomed =
+        _transformationController.value.getMaxScaleOnAxis() > 1.05;
+    if (isZoomed != _zoomed) {
+      _zoomed = isZoomed;
+      widget.onZoomChanged?.call(_zoomed);
+    }
   }
 
   @override
   void dispose() {
+    _transformationController.removeListener(_onTransformChanged);
     _transformationController.dispose();
     super.dispose();
+  }
+
+  void _onInteractionUpdate(ScaleUpdateDetails details) {
+    if (!_zoomed || details.pointerCount != 1) {
+      _edgeSwipeDx = 0;
+      return;
+    }
+    final dx = details.focalPointDelta.dx;
+    if (dx == 0) return;
+
+    final scale = _transformationController.value.getMaxScaleOnAxis();
+    final tx = _transformationController.value.getTranslation().x;
+    final atLeftEdge = tx >= -_edgeEpsilon;
+    final atRightEdge =
+        _viewportWidth > 0 &&
+        tx <= _viewportWidth * (1 - scale) + _edgeEpsilon;
+
+    if ((dx > 0 && atLeftEdge) || (dx < 0 && atRightEdge)) {
+      _edgeSwipeDx += dx;
+    } else {
+      _edgeSwipeDx = 0;
+    }
+  }
+
+  void _onInteractionEnd(ScaleEndDetails details) {
+    if (_edgeSwipeDx > _edgeThreshold) {
+      widget.onPageSwipe?.call(-1);
+    } else if (_edgeSwipeDx < -_edgeThreshold) {
+      widget.onPageSwipe?.call(1);
+    }
+    _edgeSwipeDx = 0;
   }
 
   void _handleDoubleTap() {
@@ -312,48 +388,56 @@ class _BookPageImageViewState extends State<_BookPageImageView> {
   Widget build(BuildContext context) {
     final imageUrl = widget.page.fileName!;
 
-    return GestureDetector(
-      onDoubleTapDown: (details) {
-        _doubleTapPosition = details.localPosition;
-      },
-      onDoubleTap: _handleDoubleTap,
-      child: InteractiveViewer(
-        transformationController: _transformationController,
-        minScale: 0.5,
-        maxScale: 4.0,
-        child: Center(
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.contain,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-                ),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error, color: Colors.red, size: 48),
-                    SizedBox(height: 16),
-                    Text(
-                      'Не удалось загрузить страницу',
-                      style: TextStyle(color: Colors.white),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _viewportWidth = constraints.maxWidth;
+        return GestureDetector(
+          onDoubleTapDown: (details) {
+            _doubleTapPosition = details.localPosition;
+          },
+          onDoubleTap: _handleDoubleTap,
+          child: InteractiveViewer(
+            transformationController: _transformationController,
+            minScale: 0.5,
+            maxScale: 4.0,
+            onInteractionUpdate: _onInteractionUpdate,
+            onInteractionEnd: _onInteractionEnd,
+            child: Center(
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.contain,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
                     ),
-                  ],
-                ),
-              );
-            },
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error, color: Colors.red, size: 48),
+                        SizedBox(height: 16),
+                        Text(
+                          'Не удалось загрузить страницу',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
+
