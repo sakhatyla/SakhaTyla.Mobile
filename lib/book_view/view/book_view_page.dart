@@ -286,14 +286,22 @@ class _BookPageImageViewState extends State<_BookPageImageView> {
   }
 
   void _handleDoubleTap() {
-    const zoomedScale = 2.5;
+    const zoomedScale = 2.0;
     final isZoomedIn =
         _transformationController.value.getMaxScaleOnAxis() > 1.0;
     if (isZoomedIn) {
       _transformationController.value = Matrix4.identity();
     } else {
-      final dx = -_doubleTapPosition.dx * (zoomedScale - 1);
-      final dy = -_doubleTapPosition.dy * (zoomedScale - 1);
+      final renderBox = context.findRenderObject() as RenderBox;
+      final center = renderBox.size.center(Offset.zero);
+      var dx = center.dx - zoomedScale * _doubleTapPosition.dx;
+      var dy = center.dy - zoomedScale * _doubleTapPosition.dy;
+      if (dx > 0) dx = 0;
+      if (dy > 0) dy = 0;
+      final maxDx = renderBox.size.width - zoomedScale * renderBox.size.width;
+      final maxDy = renderBox.size.height - zoomedScale * renderBox.size.height;
+      if (dx < maxDx) dx = maxDx;
+      if (dy < maxDy) dy = maxDy;
       _transformationController.value = Matrix4.identity()
         ..translateByDouble(dx, dy, 0, 1)
         ..scaleByDouble(zoomedScale, zoomedScale, 1, 1);
