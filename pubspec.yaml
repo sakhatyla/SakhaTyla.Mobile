@@ -39,6 +39,7 @@ dependencies:
   in_app_review: ^2.0.9
   shared_preferences: ^2.2.2
   flutter_dotenv: ^5.0.2
+  yandex_mobileads: ^7.18.0
 
 dev_dependencies:
   flutter_test:

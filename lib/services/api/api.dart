@@ -4,4 +4,5 @@ export 'models/book_label.dart';
 export 'models/book_page.dart';
 export 'models/suggestion.dart';
 export 'models/translation.dart';
+export 'models/config.dart';
 export 'api_client.dart';

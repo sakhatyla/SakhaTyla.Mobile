@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sakhatyla/ads/ads.dart';
 import 'package:sakhatyla/home/home.dart';
 import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/random_article/random_article.dart';
@@ -17,7 +18,10 @@ class Home extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 RandomArticleBloc(api: locator<ApiClient>())..add(Load()),
-          )
+          ),
+          BlocProvider(
+            create: (context) => AdsBloc(apiClient: locator<ApiClient>()),
+          ),
         ],
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) => Column(
@@ -43,7 +47,21 @@ class Home extends StatelessWidget {
 
   Widget _main(HomeState state) {
     if (state is HomeEmpty) {
-      return RandomArticle();
+      return Expanded(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              RandomArticle(),
+              LayoutBuilder(
+                builder: (context, constraints) => AdsBanner(
+                  width: constraints.maxWidth.toInt(),
+                  maxHeight: (constraints.maxWidth / 4 * 3).toInt(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
     if (state is HomeSearching) {
       return Expanded(child: SuggestionList(state.suggestions));

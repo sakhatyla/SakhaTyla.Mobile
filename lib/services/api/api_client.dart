@@ -135,4 +135,18 @@ class ApiClient {
       throw Exception('Failed to get book page');
     }
   }
+
+  Future<Config> getMobileConfig(String key) async {
+    final response = await http.post(
+      Uri.parse('$endpoint/api/GetMobileConfig'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'key': key}),
+    );
+
+    if (response.statusCode == 200) {
+      return Config.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to get mobile config');
+    }
+  }
 }

@@ -10,8 +10,20 @@ import 'package:sakhatyla/main/bloc/main_event.dart';
 import 'package:sakhatyla/main/bloc/main_state.dart';
 import 'package:sakhatyla/services/api/api.dart';
 import 'package:sakhatyla/services/database/database.dart';
+import 'package:yandex_mobileads/mobile_ads.dart';
 
-class Main extends StatelessWidget {
+class Main extends StatefulWidget {
+  @override
+  State<Main> createState() => _MainState();
+}
+
+class _MainState extends State<Main> {
+  @override
+  void initState() {
+    super.initState();
+    MobileAds.initialize();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
