@@ -93,6 +93,7 @@ class _SearchBarState extends State<SearchBar> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
                       ),
                       onPressed: () {
                         this.onLetterPress('ҥ');
@@ -106,6 +107,7 @@ class _SearchBarState extends State<SearchBar> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
                       ),
                       onPressed: () {
                         this.onLetterPress('ҕ');
@@ -119,6 +121,7 @@ class _SearchBarState extends State<SearchBar> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
                       ),
                       onPressed: () {
                         this.onLetterPress('ө');
@@ -132,6 +135,7 @@ class _SearchBarState extends State<SearchBar> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
                       ),
                       onPressed: () {
                         this.onLetterPress('һ');
@@ -145,6 +149,7 @@ class _SearchBarState extends State<SearchBar> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
                       ),
                       onPressed: () {
                         this.onLetterPress('ү');
