@@ -256,6 +256,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
+  keyboard_detection:
+    dependency: "direct main"
+    description:
+      name: keyboard_detection
+      sha256: e25924923c9f94dbdb705eac5f3149ac4ec7503ec99a7476a13c86baa4174bdb
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.1"
   leak_tracker:
     dependency: transitive
     description:

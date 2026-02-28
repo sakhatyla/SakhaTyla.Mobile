@@ -10,6 +10,10 @@ import 'package:sakhatyla/home/view/suggestion_list.dart';
 import 'package:sakhatyla/home/view/translation_list.dart';
 
 class Home extends StatelessWidget {
+  final bool isKeyboardVisible;
+
+  Home({this.isKeyboardVisible = false}) {}
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,12 +41,20 @@ class Home extends StatelessWidget {
 
   Widget _searchBar(HomeState state) {
     if (state is HomeLoading) {
-      return sb.SearchBar(query: state.query);
+      return sb.SearchBar(
+        query: state.query,
+        showSakhaLetters: this.isKeyboardVisible,
+      );
     }
     if (state is HomeSuccess) {
-      return sb.SearchBar(query: state.translation.query);
+      return sb.SearchBar(
+        query: state.translation.query,
+        showSakhaLetters: this.isKeyboardVisible,
+      );
     }
-    return sb.SearchBar();
+    return sb.SearchBar(
+      showSakhaLetters: this.isKeyboardVisible,
+    );
   }
 
   Widget _main(HomeState state) {

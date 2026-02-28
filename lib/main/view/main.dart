@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keyboard_detection/keyboard_detection.dart';
 import 'package:sakhatyla/app_drawer.dart';
 import 'package:sakhatyla/books/books.dart';
 import 'package:sakhatyla/favorite/favorite.dart';
@@ -18,6 +19,8 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
+  bool isKeyboardVisible = false;
+
   @override
   void initState() {
     super.initState();
@@ -50,40 +53,49 @@ class _MainState extends State<Main> {
         ],
         child: BlocBuilder<MainBloc, MainState>(
           builder: (context, state) {
-            return Scaffold(
-              appBar: AppBar(
-                title: Text("Саха Тыла"),
-              ),
-              drawer: AppDrawer(
-                title: "Саха Тыла",
-              ),
-              body: Container(
-                child: state.selectedIndex == 0
-                    ? Home()
-                    : state.selectedIndex == 1
-                        ? BooksList()
-                        : FavoriteList(),
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.search),
-                    label: 'Поиск',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.menu_book),
-                    label: 'Книги',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.star),
-                    label: 'Избранное',
-                  )
-                ],
-                currentIndex: state.selectedIndex,
-                onTap: (value) {
-                  BlocProvider.of<MainBloc>(context)
-                      .add(ChangeSelectedIndex(value));
+            return KeyboardDetection(
+              controller: KeyboardDetectionController(
+                onChanged: (state) {
+                  setState(() {
+                    isKeyboardVisible = state == KeyboardState.visible;
+                  });
                 },
+              ),
+              child: Scaffold(
+                appBar: AppBar(
+                  title: Text("Саха Тыла"),
+                ),
+                drawer: AppDrawer(
+                  title: "Саха Тыла",
+                ),
+                body: Container(
+                  child: state.selectedIndex == 0
+                      ? Home(isKeyboardVisible: isKeyboardVisible)
+                      : state.selectedIndex == 1
+                          ? BooksList()
+                          : FavoriteList(),
+                ),
+                bottomNavigationBar: BottomNavigationBar(
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.search),
+                      label: 'Поиск',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.menu_book),
+                      label: 'Книги',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.star),
+                      label: 'Избранное',
+                    )
+                  ],
+                  currentIndex: state.selectedIndex,
+                  onTap: (value) {
+                    BlocProvider.of<MainBloc>(context)
+                        .add(ChangeSelectedIndex(value));
+                  },
+                ),
               ),
             );
           },
