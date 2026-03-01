@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '92000584366',
     projectId: 'sakhatyla',
     databaseURL: 'https://sakhatyla.firebaseio.com',
-    storageBucket: 'sakhatyla.appspot.com',
+    storageBucket: 'sakhatyla.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -64,8 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '92000584366',
     projectId: 'sakhatyla',
     databaseURL: 'https://sakhatyla.firebaseio.com',
-    storageBucket: 'sakhatyla.appspot.com',
-    iosClientId: '92000584366-5g0ci4l6dvlnnqkck3nq7kj1uj5o2o5g.apps.googleusercontent.com',
+    storageBucket: 'sakhatyla.firebasestorage.app',
     iosBundleId: 'ru.sakhatyla.app',
   );
 
