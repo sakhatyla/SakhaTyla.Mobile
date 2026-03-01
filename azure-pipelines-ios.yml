@@ -35,6 +35,11 @@ stages:
       inputs:
         provisioningProfileLocation: 'secureFiles'
         provProfileSecureFile: 'SakhaTyla.mobileprovision'
+    
+    - task: FlutterCommand@0
+      inputs:
+        projectDirectory: '.'
+        arguments: 'pub global activate flutterfire_cli'
         
     - task: FlutterBuild@0
       displayName: Build
