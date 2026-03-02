@@ -5,6 +5,7 @@ import 'package:sakhatyla/app_drawer.dart';
 import 'package:sakhatyla/books/books.dart';
 import 'package:sakhatyla/favorite/favorite.dart';
 import 'package:sakhatyla/home/home.dart';
+import 'package:sakhatyla/keyboard/keyboard.dart';
 import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/main/bloc/main_bloc.dart';
 import 'package:sakhatyla/main/bloc/main_event.dart';
@@ -19,8 +20,6 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  bool isKeyboardVisible = false;
-
   @override
   void initState() {
     super.initState();
@@ -33,6 +32,9 @@ class _MainState extends State<Main> {
       create: (context) => MainBloc(),
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(
+            create: (context) => KeyboardBloc(),
+          ),
           BlocProvider(
             create: (context) => HomeBloc(
               api: locator<ApiClient>(),
@@ -56,9 +58,9 @@ class _MainState extends State<Main> {
             return KeyboardDetection(
               controller: KeyboardDetectionController(
                 onChanged: (state) {
-                  setState(() {
-                    isKeyboardVisible = state == KeyboardState.visible;
-                  });
+                  BlocProvider.of<KeyboardBloc>(context)
+                      .add(KeyboardVisibilityChanged(
+                          state == KeyboardState.visible));
                 },
               ),
               child: Scaffold(
@@ -70,7 +72,7 @@ class _MainState extends State<Main> {
                 ),
                 body: Container(
                   child: state.selectedIndex == 0
-                      ? Home(isKeyboardVisible: isKeyboardVisible)
+                      ? Home()
                       : state.selectedIndex == 1
                           ? BooksList()
                           : FavoriteList(),
