@@ -57,7 +57,8 @@ class _ArticleCardState extends State<ArticleCard> {
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = Theme.of(context).cardColor;
+    final cardColor = Theme.of(context).cardTheme.color ??
+        Theme.of(context).colorScheme.surfaceContainerLow;
 
     return GestureDetector(
       onTap: () {
