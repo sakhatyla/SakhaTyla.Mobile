@@ -17,8 +17,48 @@ class ArticleCard extends StatefulWidget {
 }
 
 class _ArticleCardState extends State<ArticleCard> {
+  static const double _maxCollapsedHeight = 150.0;
+
+  bool _isExpanded = false;
+  bool _overflows = false;
+  final GlobalKey _textKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _scheduleOverflowCheck();
+  }
+
+  @override
+  void didUpdateWidget(ArticleCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.article.id != widget.article.id ||
+        oldWidget.article.text != widget.article.text ||
+        oldWidget.article.collapsed != widget.article.collapsed) {
+      _isExpanded = false;
+      _overflows = false;
+      _scheduleOverflowCheck();
+    }
+  }
+
+  void _scheduleOverflowCheck() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final renderBox =
+          _textKey.currentContext?.findRenderObject() as RenderBox?;
+      if (renderBox != null) {
+        final overflows = renderBox.size.height > _maxCollapsedHeight;
+        if (_overflows != overflows) {
+          setState(() => _overflows = overflows);
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final cardColor = Theme.of(context).cardColor;
+
     return GestureDetector(
       onTap: () {
         BlocProvider.of<HomeBloc>(context)
@@ -44,20 +84,61 @@ class _ArticleCardState extends State<ArticleCard> {
                 },
               ),
             ),
-            !widget.article.collapsed
-                ? Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: HtmlText(widget.article.text),
-                  )
-                : Container(),
-            !widget.article.collapsed &&
-                    widget.article.categoryName != null &&
-                    widget.article.categoryName!.isNotEmpty
-                ? Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                    child: Text('Категория: ${widget.article.categoryName}',
-                        style: TextStyle(fontStyle: FontStyle.italic)))
-                : Container()
+            if (!widget.article.collapsed)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: _isExpanded
+                    ? HtmlText(widget.article.text)
+                    : Stack(
+                        children: [
+                          ConstrainedBox(
+                            constraints:
+                                BoxConstraints(maxHeight: _maxCollapsedHeight),
+                            child: SingleChildScrollView(
+                              physics: NeverScrollableScrollPhysics(),
+                              child: SizedBox(
+                                key: _textKey,
+                                child: HtmlText(widget.article.text),
+                              ),
+                            ),
+                          ),
+                          if (_overflows)
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              height: 40,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      cardColor.withValues(alpha: 0),
+                                      cardColor,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+              ),
+            if (!widget.article.collapsed && _overflows)
+              Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: TextButton(
+                  onPressed: () => setState(() => _isExpanded = !_isExpanded),
+                  child: Text(_isExpanded ? 'Свернуть' : 'Развернуть'),
+                ),
+              ),
+            if (!widget.article.collapsed &&
+                widget.article.categoryName != null &&
+                widget.article.categoryName!.isNotEmpty)
+              Padding(
+                  padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                  child: Text('Категория: ${widget.article.categoryName}',
+                      style: TextStyle(fontStyle: FontStyle.italic)))
           ],
         ),
       ),
