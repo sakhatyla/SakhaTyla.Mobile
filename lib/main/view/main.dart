@@ -63,40 +63,43 @@ class _MainState extends State<Main> {
                           state == KeyboardState.visible));
                 },
               ),
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Text("Саха Тыла"),
-                ),
-                drawer: AppDrawer(
-                  title: "Саха Тыла",
-                ),
-                body: Container(
-                  child: state.selectedIndex == 0
-                      ? Home()
-                      : state.selectedIndex == 1
-                          ? BooksList()
-                          : FavoriteList(),
-                ),
-                bottomNavigationBar: BottomNavigationBar(
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.search),
-                      label: 'Поиск',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.menu_book),
-                      label: 'Книги',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.star),
-                      label: 'Избранное',
-                    )
-                  ],
-                  currentIndex: state.selectedIndex,
-                  onTap: (value) {
-                    BlocProvider.of<MainBloc>(context)
-                        .add(ChangeSelectedIndex(value));
-                  },
+              child: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text("Саха Тыла"),
+                  ),
+                  drawer: AppDrawer(
+                    title: "Саха Тыла",
+                  ),
+                  body: Container(
+                    child: state.selectedIndex == 0
+                        ? Home()
+                        : state.selectedIndex == 1
+                            ? BooksList()
+                            : FavoriteList(),
+                  ),
+                  bottomNavigationBar: BottomNavigationBar(
+                    items: [
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.search),
+                        label: 'Поиск',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.menu_book),
+                        label: 'Книги',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.star),
+                        label: 'Избранное',
+                      )
+                    ],
+                    currentIndex: state.selectedIndex,
+                    onTap: (value) {
+                      BlocProvider.of<MainBloc>(context)
+                          .add(ChangeSelectedIndex(value));
+                    },
+                  ),
                 ),
               ),
             );
