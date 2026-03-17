@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_detection/keyboard_detection.dart';
+import 'package:sakhatyla/ads/ads.dart';
 import 'package:sakhatyla/app_drawer.dart';
 import 'package:sakhatyla/books/books.dart';
 import 'package:sakhatyla/favorite/favorite.dart';
@@ -10,6 +11,7 @@ import 'package:sakhatyla/locator.dart';
 import 'package:sakhatyla/main/bloc/main_bloc.dart';
 import 'package:sakhatyla/main/bloc/main_event.dart';
 import 'package:sakhatyla/main/bloc/main_state.dart';
+import 'package:sakhatyla/random_article/random_article.dart' as ra;
 import 'package:sakhatyla/services/api/api.dart';
 import 'package:sakhatyla/services/database/database.dart';
 import 'package:yandex_mobileads/mobile_ads.dart';
@@ -41,6 +43,13 @@ class _MainState extends State<Main> {
               database: locator<AppDatabase>(),
               mainBloc: BlocProvider.of<MainBloc>(context),
             ),
+          ),
+          BlocProvider(
+            create: (context) =>
+                ra.RandomArticleBloc(api: locator<ApiClient>())..add(ra.Load()),
+          ),
+          BlocProvider(
+            create: (context) => AdsBloc(apiClient: locator<ApiClient>()),
           ),
           BlocProvider(
             create: (context) => BooksBloc(
