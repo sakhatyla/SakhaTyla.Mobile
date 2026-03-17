@@ -36,7 +36,7 @@ class _MainState extends State<Main> {
             create: (context) => KeyboardBloc(),
           ),
           BlocProvider(
-            create: (context) => HomeBloc(
+            create: (context) => SearchBloc(
               api: locator<ApiClient>(),
               database: locator<AppDatabase>(),
               mainBloc: BlocProvider.of<MainBloc>(context),
@@ -76,11 +76,18 @@ class _MainState extends State<Main> {
                     child: state.selectedIndex == 0
                         ? Home()
                         : state.selectedIndex == 1
-                            ? BooksList()
-                            : FavoriteList(),
+                            ? SearchPage()
+                            : state.selectedIndex == 2
+                                ? BooksList()
+                                : FavoriteList(),
                   ),
                   bottomNavigationBar: BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
                     items: [
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        label: 'Главная',
+                      ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.search),
                         label: 'Поиск',

@@ -1,4 +1,5 @@
-export 'bloc/home_bloc.dart';
-export 'bloc/home_event.dart';
-export 'bloc/home_state.dart';
+export 'bloc/search_bloc.dart';
+export 'bloc/search_event.dart';
+export 'bloc/search_state.dart';
 export 'view/home.dart';
+export 'view/search_page.dart';

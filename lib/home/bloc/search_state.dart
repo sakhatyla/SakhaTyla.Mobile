@@ -1,54 +1,54 @@
 import 'package:equatable/equatable.dart';
 import 'package:sakhatyla/services/api/api.dart';
 
-abstract class HomeState extends Equatable {
-  const HomeState();
+abstract class SearchState extends Equatable {
+  const SearchState();
 
   @override
   List<Object> get props => [];
 }
 
-class HomeEmpty extends HomeState {}
+class SearchEmpty extends SearchState {}
 
-class HomeSearching extends HomeState {
+class SearchSuggesting extends SearchState {
   final List<Suggestion> suggestions;
 
-  const HomeSearching(this.suggestions);
+  const SearchSuggesting(this.suggestions);
 
   @override
   List<Object> get props => [suggestions];
 }
 
-class HomeHistory extends HomeState {
+class SearchHistory extends SearchState {
   final List<Suggestion> suggestions;
 
-  const HomeHistory(this.suggestions);
+  const SearchHistory(this.suggestions);
 
   @override
   List<Object> get props => [suggestions];
 }
 
-class HomeLoading extends HomeState {
+class SearchLoading extends SearchState {
   final String query;
 
-  const HomeLoading(this.query);
+  const SearchLoading(this.query);
 
   List<Object> get props => [query];
 }
 
-class HomeSuccess extends HomeState {
+class SearchSuccess extends SearchState {
   final Translation translation;
 
-  const HomeSuccess(this.translation);
+  const SearchSuccess(this.translation);
 
   @override
   List<Object> get props => [translation];
 }
 
-class HomeError extends HomeState {
+class SearchError extends SearchState {
   final String error;
 
-  const HomeError(this.error);
+  const SearchError(this.error);
 
   @override
   List<Object> get props => [error];

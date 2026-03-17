@@ -40,10 +40,10 @@ class _SearchBarState extends State<SearchBar> {
     final letterButtonWidth = MediaQuery.of(context).size.width / 8;
     return BlocBuilder<KeyboardBloc, KeyboardBlocState>(
       builder: (context, keyboardState) {
-        return BlocListener<HomeBloc, HomeState>(
+        return BlocListener<SearchBloc, SearchState>(
           listener: (context, state) {
             setState(() {
-              if (state is HomeLoading) {
+              if (state is SearchLoading) {
                 textController.text = state.query;
               }
             });
@@ -53,20 +53,20 @@ class _SearchBarState extends State<SearchBar> {
               TextField(
                 controller: textController,
                 onTap: () {
-                  BlocProvider.of<HomeBloc>(context).add(LastQuery());
+                  BlocProvider.of<SearchBloc>(context).add(LastQuery());
                 },
                 onSubmitted: _search,
                 onChanged: (text) {
                   setState(() {});
                   _debouncer.run(() =>
-                      BlocProvider.of<HomeBloc>(context).add(Suggest(query: text)));
+                      BlocProvider.of<SearchBloc>(context).add(Suggest(query: text)));
                 },
                 decoration: InputDecoration(
                     hintText: 'Введите текст',
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                     suffixIcon: textController.text.length > 0 ||
-                            BlocProvider.of<HomeBloc>(context).state is HomeHistory
+                            BlocProvider.of<SearchBloc>(context).state is SearchHistory
                         ? IconButton(
                             icon: Icon(Icons.clear),
                             onPressed: () {
@@ -177,7 +177,7 @@ class _SearchBarState extends State<SearchBar> {
 
   _search(String text) {
     _debouncer.cancel();
-    BlocProvider.of<HomeBloc>(context).add(Search(query: text));
+    BlocProvider.of<SearchBloc>(context).add(Search(query: text));
   }
 
   _openKeyboardUrl() async {

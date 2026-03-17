@@ -8,17 +8,17 @@ import 'package:sakhatyla/services/api/api.dart';
 import 'package:sakhatyla/services/database/database.dart';
 import 'package:sakhatyla/services/error/error.dart';
 
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
+class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final ApiClient api;
   final AppDatabase database;
   final MainBloc mainBloc;
   final List<StreamSubscription> _subscriptions = [];
 
-  HomeBloc({
+  SearchBloc({
     required this.api,
     required this.database,
     required this.mainBloc,
-  }) : super(HomeEmpty()) {
+  }) : super(SearchEmpty()) {
     _subscriptions.add(database.onFavoriteArticleAdded.listen(
       (id) => add(FavoriteArticleAdded(id)),
     ));
@@ -26,12 +26,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       (id) => add(FavoriteArticleRemoved(id)),
     ));
     on<Search>((event, emit) async {
-      mainBloc.add(ChangeSelectedIndex(0));
+      mainBloc.add(ChangeSelectedIndex(1));
       if (event.query.isEmpty) {
-        emit(HomeEmpty());
+        emit(SearchEmpty());
       } else {
         database.addLastQuery(event.query);
-        emit(HomeLoading(event.query));
+        emit(SearchLoading(event.query));
         await FirebaseAnalytics.instance.logEvent(
           name: 'search',
           parameters: {
@@ -46,10 +46,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           final favoriteArticleIds = favoriteArticles.map((a) => a.id).toList();
           translation =
               translation.copyWith(favoriteArticleIds: favoriteArticleIds);
-          emit(HomeSuccess(translation));
+          emit(SearchSuccess(translation));
         } catch (err, s) {
           reportError(err, s);
-          emit(HomeError('error'));
+          emit(SearchError('error'));
         }
       }
     });
@@ -57,44 +57,44 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (event.query.length >= 2) {
         try {
           final suggestions = await api.getSuggestions(event.query);
-          emit(HomeSearching(suggestions));
+          emit(SearchSuggesting(suggestions));
         } catch (err, s) {
           reportError(err, s);
-          emit(HomeError('error'));
+          emit(SearchError('error'));
         }
       } else {
-        emit(HomeEmpty());
+        emit(SearchEmpty());
       }
     });
     on<ToggleArticle>((event, emit) {
-      if (state is HomeSuccess) {
-        emit(HomeSuccess((state as HomeSuccess)
+      if (state is SearchSuccess) {
+        emit(SearchSuccess((state as SearchSuccess)
             .translation
             .copyWith(toggleArticleId: event.id)));
       }
     });
     on<LastQuery>((event, emit) async {
-      emit(HomeEmpty());
+      emit(SearchEmpty());
       final queries = await database.getLastQueries();
       if (queries.isEmpty) {
-        emit(HomeEmpty());
+        emit(SearchEmpty());
       } else {
-        emit(HomeHistory(List.generate(
+        emit(SearchHistory(List.generate(
           queries.length,
           (i) => Suggestion(id: 0, title: queries[i]),
         )));
       }
     });
     on<FavoriteArticleAdded>((event, emit) {
-      if (state is HomeSuccess) {
-        emit(HomeSuccess((state as HomeSuccess)
+      if (state is SearchSuccess) {
+        emit(SearchSuccess((state as SearchSuccess)
             .translation
             .copyWith(favoriteArticleIds: [event.id])));
       }
     });
     on<FavoriteArticleRemoved>((event, emit) {
-      if (state is HomeSuccess) {
-        emit(HomeSuccess((state as HomeSuccess)
+      if (state is SearchSuccess) {
+        emit(SearchSuccess((state as SearchSuccess)
             .translation
             .copyWith(notFavoriteArticleIds: [event.id])));
       }

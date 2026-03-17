@@ -30,7 +30,7 @@ class SuggestionList extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        BlocProvider.of<HomeBloc>(context)
+        BlocProvider.of<SearchBloc>(context)
             .add(Search(query: suggestions[index].title));
         FocusScope.of(context).unfocus();
       },

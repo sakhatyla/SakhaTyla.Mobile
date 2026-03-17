@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-abstract class HomeEvent extends Equatable {
-  const HomeEvent();
+abstract class SearchEvent extends Equatable {
+  const SearchEvent();
 }
 
-class Search extends HomeEvent {
+class Search extends SearchEvent {
   final String query;
 
   const Search({required this.query});
@@ -13,7 +13,7 @@ class Search extends HomeEvent {
   List<Object> get props => [query];
 }
 
-class Suggest extends HomeEvent {
+class Suggest extends SearchEvent {
   final String query;
 
   const Suggest({required this.query});
@@ -22,7 +22,7 @@ class Suggest extends HomeEvent {
   List<Object> get props => [query];
 }
 
-class ToggleArticle extends HomeEvent {
+class ToggleArticle extends SearchEvent {
   final int id;
 
   const ToggleArticle(this.id);
@@ -31,12 +31,12 @@ class ToggleArticle extends HomeEvent {
   List<Object> get props => [id];
 }
 
-class LastQuery extends HomeEvent {
+class LastQuery extends SearchEvent {
   @override
   List<Object> get props => [];
 }
 
-class FavoriteArticleAdded extends HomeEvent {
+class FavoriteArticleAdded extends SearchEvent {
   final int id;
 
   const FavoriteArticleAdded(this.id);
@@ -45,7 +45,7 @@ class FavoriteArticleAdded extends HomeEvent {
   List<Object> get props => [id];
 }
 
-class FavoriteArticleRemoved extends HomeEvent {
+class FavoriteArticleRemoved extends SearchEvent {
   final int id;
 
   const FavoriteArticleRemoved(this.id);
